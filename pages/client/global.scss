@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input {
+    padding: 5px;
+    border: solid 1px rgb(200, 200, 200);
+    border-radius: 3px;
+
+    &:focus {
+        border-color: black;
+        outline: none;
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "python.pythonPath": "venv/bin/python3",
+    "editor.minimap.enabled": false,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "[php]": {
+        "editor.formatOnSave": false,
+    },
+    "editor.wordWrap": "off",
+    "editor.rulers": [
+        120
+    ],
+    "workbench.tree.indent": 20,
+    "workbench.colorTheme": "Default Dark+",
+    //"window.titleBarStyle": "custom",
+    //"window.customMenuBarAltFocus": false,
+    "workbench.colorCustomizations": {
+        "[Default Dark+]": {
+            "activityBar.foreground": "#ffffff",
+            "activityBar.inactiveForeground": "#D3D3D3",
+            "activityBar.background": "#696969",
+            "activityBarBadge.foreground": "#ffffff",
+            "activityBarBadge.background": "#ff0000",
+            "badge.background": "#ff0000",
+            "badge.foreground": "#ffffff",
+            "statusBar.background": "#696969",
+            "statusBar.foreground": "#ffffff",
+            "titleBar.activeBackground": "#696969",
+            "titleBar.activeForeground": "#ffffff"
+        }
+    },
+    "files.autoSave": "onFocusChange",
+    "files.trimTrailingWhitespace": true,
+    "files.exclude": {
+        // ".git": true,
+        // ".gitignore": true,
+        // "**/.gitkeep": true,
+        // "**/__pycache__": true,
+        // "**/*.pyc": true,
+        // "venv": true,
+        // "e2e": true,
+        // "**/*.spec.ts": true,
+        // "src/test.ts": true,
+        // "karma.conf.js": true,
+        // "tsconfig.spec.json": true,
+        // "node_modules": true,
+        // "src/favicon.ico": true,
+        // "src/main.ts": true,
+        // "src/polyfills.ts": true,
+        // "README.md": true,
+        // ".editorconfig": true,
+        // "browserslist": true,
+        // "tslint.json": true,
+        // "ng-add-pug-loader.js": true,
+        // "package-lock.json": true,
+        // "tsconfig.app.json": true,
+        // "tsconfig.json": true
+    }
+}

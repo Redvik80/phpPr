@@ -1,0 +1,67 @@
+.programs-crud-table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+
+    tr {
+
+        &.changed {
+
+            .program-name-text,
+            .duration-text,
+            .buttons-container .change,
+            .buttons-container .delete {
+                display: none;
+            }
+        }
+
+        &:not(.changed) {
+
+            .program-name-input,
+            .duration-inputs,
+            .buttons-container .save,
+            .buttons-container .cancel {
+                display: none;
+            }
+        }
+
+        >td {
+            padding: 5px;
+
+            &:not(.buttons-container) {
+                border: solid 2px rgb(175, 175, 175);
+            }
+        }
+
+        >th {
+            padding: 5px;
+        }
+
+        .program-name-input {
+            width: 100%;
+        }
+
+        .duration-cell {
+            width: 210px;
+
+            .duration-mins,
+            .duration-hours {
+                width: 70px;
+                margin-right: 2px;
+            }
+        }
+
+        .buttons-container {
+            width: 90px;
+            white-space: nowrap;
+            text-align: center;
+
+            >button {
+                padding: 1px;
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+            }
+        }
+    }
+}

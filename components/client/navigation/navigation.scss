@@ -1,0 +1,23 @@
+#page-navigation {
+    display: flex;
+    font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
+
+    >a {
+        flex-grow: 1;
+        padding: 20px;
+        text-align: center;
+        background-color: rgb(75, 75, 75);
+        text-decoration: none;
+        color: rgb(200, 200, 200);
+
+        &:hover {
+            background-color: rgb(60, 60, 60);
+            color: white;
+        }
+
+        &.selected {
+            background-color: black;
+            color: white;
+        }
+    }
+}
