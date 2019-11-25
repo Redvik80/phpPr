@@ -6,13 +6,13 @@
 
     <link rel="stylesheet" type="text/css" href="/node_modules/primeicons/primeicons.css" />
 
-    <link rel="stylesheet" href="/dist/admin/home.css">
-    <script src="/dist/admin/home.js" defer></script>
+    <link rel="stylesheet" href="/dist/admin/programs.css">
+    <script src="/dist/admin/programs.js" defer></script>
 </head>
 
 <body>
     <?include "../../../components/admin/navigation/navigation.php"?>
-    <?include "../../../components/admin/programsAdsCrud/programsAdsCrud.php"?>
+    <?include "../../../components/admin/programsCrud/programsCrud.php"?>
 </body>
 
 </html>

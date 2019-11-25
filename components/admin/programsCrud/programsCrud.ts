@@ -1,136 +1,154 @@
-const table = document.getElementsByClassName("programs-crud-table")[0];
-const rows = table.querySelectorAll("tbody tr") as NodeListOf<HTMLTableRowElement>;
-const addButton = table.querySelector(".buttons-container .add") as HTMLButtonElement;
+export { };
 
-addButton.addEventListener("click", onAddBtnClick);
-rows.forEach((row) => {
-    addEventListenersToRow(row);
-});
+const comp = document.getElementsByClassName("programs-crud-component")[0] as HTMLElement;
+const addBtn = comp.querySelector(".table__btn._add") as HTMLButtonElement;
+const rowsContainer = comp.getElementsByClassName("table__body")[0] as HTMLElement;
+const rows = rowsContainer.getElementsByClassName("table__row") as HTMLCollectionOf<HTMLElement>;
+let programs: Program[] = [];
 
-function addEventListenersToRow(row: HTMLTableRowElement) {
-    row.getElementsByClassName("change")[0].addEventListener("click", onChangeBtnClick);
-    row.getElementsByClassName("cancel")[0].addEventListener("click", onCancelBtnClick);
-    row.getElementsByClassName("delete")[0].addEventListener("click", onDeleteBtnClick);
-    row.getElementsByClassName("save")[0].addEventListener("click", onSaveBtnClick);
+addBtn.addEventListener("click", onAddBtnClick);
+
+fetch(`/api/program/getAll.php`).then((resp) => resp.json()).then((data) => {
+    programs = data;
+    for (let program of programs) rowsContainer.insertAdjacentHTML("beforeend", createRow(program));
+    for (let i = 0; i < rows.length; i++) addEventListenersToRow(rows[i]);
 }
 
-async function onSaveBtnClick(event: MouseEvent) {
-    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
-    const newData = getRowNewData(row);
-    if (newData.id) {
-        await fetch(`/api/program/change.php`, {
-            method: "post",
-            body: JSON.stringify({
-                id: newData.id,
-                program_name: newData.programName,
-                duration: newData.duration
-            })
-        });
-        setRowNewData(row, newData);
-        row.classList.remove("changed");
-    } else {
-        newData.id = await (await fetch(`/api/program/add.php`, {
-            method: "post",
-            body: JSON.stringify({
-                program_name: newData.programName,
-                duration: newData.duration
-            })
-        })).json();
-        console.log(newData.id);
-        setRowNewData(row, newData);
-        row.classList.remove("changed");
+);
+
+function getRowElems(row: HTMLElement) {
+    return {
+        id: row.querySelector(".table__cell._id .table__cell-value") as HTMLElement,
+        nameValue: row.querySelector(".table__cell._name .table__cell-value") as HTMLElement,
+        nameChangeElem: row.querySelector(".table__cell._name .table__cell-change-elem") as HTMLInputElement,
+        durationValue: row.querySelector(".table__cell._duration .table__cell-value") as HTMLElement,
+        durationChangeElemHours: row.querySelector(".table__cell._duration .table__cell-change-elem._hours") as HTMLInputElement,
+        durationChangeElemMins: row.querySelector(".table__cell._duration .table__cell-change-elem._mins") as HTMLInputElement,
+        btnChange: row.querySelector(".table__btn._change") as HTMLButtonElement,
+        btnDelete: row.querySelector(".table__btn._delete") as HTMLButtonElement,
+        btnSave: row.querySelector(".table__btn._save") as HTMLButtonElement,
+        btnCancel: row.querySelector(".table__btn._cancel") as HTMLButtonElement
     }
-}
-
-async function onDeleteBtnClick(event: MouseEvent) {
-    if (!confirm("Хорошо подумали?")) return;
-    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
-    const id = (row.getElementsByClassName("id-cell")[0] as HTMLElement).innerText;
-    await fetch("/api/program/delete.php?id=" + id, { method: "delete" });
-    row.style.display = "none";
-}
-
-function onCancelBtnClick(event: MouseEvent) {
-    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
-    const id = (row.getElementsByClassName("id-cell")[0] as HTMLElement).innerText;
-    if (id) {
-        row.classList.remove("changed");
-        setRowOldData(row);
-    }
-    else row.parentElement.removeChild(row);
-}
-
-function onChangeBtnClick(event: MouseEvent) {
-    getButtonsRow(event.currentTarget as HTMLButtonElement).classList.add("changed");
-}
-
-function onAddBtnClick() {
-    table.insertAdjacentHTML("afterbegin", `
-        <tr class="changed">
-            <td class="id-cell"></td>
-            <td>
-                <span class="program-name-text"></span>
-                <input class="program-name-input">
-            </td>
-            <td class="duration-cell">
-                <span class="duration-text"></span>
-                <span class="duration-inputs">
-                    <input type="number" class="duration-hours" min="0" max="60" value="1">ч.
-                    <input type="number" class="duration-mins" min="0" max="24" value="0">мин.
-                </span>
-            </td>
-            <td class="buttons-container">
-                <button class="pi pi-pencil change"></button>
-                <button class="pi pi-trash delete"></button>
-                <button class="pi pi-save save"></button>
-                <button class="pi pi-times cancel"></button>
-            </td>
-        </tr>
-    `);
-    const newRow = table.querySelector("tbody tr") as HTMLTableRowElement;
-    addEventListenersToRow(newRow);
 }
 
 function getButtonsRow(button: HTMLButtonElement) {
     return (button.parentElement as HTMLElement).parentElement as HTMLElement;
 }
 
-function getRowNewData(row: HTMLElement) {
-    return {
-        id: +(row.getElementsByClassName("id-cell")[0] as HTMLElement).innerText,
-        programName: (row.getElementsByClassName("program-name-input")[0] as HTMLInputElement).value,
-        duration: +(row.getElementsByClassName("duration-hours")[0] as HTMLInputElement).value * 3600000 +
-            +(row.getElementsByClassName("duration-mins")[0] as HTMLInputElement).value * 60000
+function addEventListenersToRow(row: HTMLElement) {
+    const rowElems = getRowElems(row);
+    rowElems.btnChange.addEventListener("click", onChangeBtnClick);
+    rowElems.btnCancel.addEventListener("click", onCancelBtnClick);
+    rowElems.btnDelete.addEventListener("click", onDeleteBtnClick);
+    rowElems.btnSave.addEventListener("click", onSaveBtnClick);
+}
+
+function convertDuration(duration: number) {
+    const hours = Math.floor(duration / 3600000);
+    const mins = Math.floor((duration - hours * 3600000) / 60000);
+    const str = (hours > 0 ? hours + "ч. " : "") + (mins > 0 || hours === 0 ? mins + "мин." : "");
+    return { hours, mins, str }
+}
+
+function createRow(program: Program) {
+    const duration = convertDuration(program.duration);
+    return `<div class="table__row">
+        <div class="table__content-cells-container">
+            <div class="table__cell _id">
+                <div class="table__cell-value">${program.id || ""}</div>
+            </div>
+            <div class="table__cell _name">
+                <div class="table__cell-value">${program.name}</div>
+                <input class="table__cell-change-elem" maxlength="200" name="name" value="${program.name}">
+            </div>
+            <div class="table__cell _duration">
+                <div class="table__cell-value">${duration.str}</div>
+                <div class="table__cell-change-elem-container">
+                    <input class="table__cell-change-elem _hours" type="number" min="0" max="24" value="${duration.hours}">ч.
+                    <input class="table__cell-change-elem _mins" type="number" min="0" max="59" value="${duration.mins}">мин.
+                </div>
+            </div>
+        </div>
+        <div class="table__cell _btns">
+            <button class="pi pi-pencil table__btn _change"></button>
+            <button class="pi pi-trash table__btn _delete"></button>
+            <button class="pi pi-save table__btn _save"></button>
+            <button class="pi pi-times table__btn _cancel"></button>
+        </div>
+    </div>`
+}
+
+function onAddBtnClick() {
+    const newProgram: Program = {
+        id: null,
+        name: "",
+        duration: 3600000
     }
+    rowsContainer.insertAdjacentHTML("afterbegin", createRow(newProgram));
+    const newRow = rowsContainer.firstElementChild as HTMLElement;
+    addEventListenersToRow(newRow);
+    getRowElems(newRow).btnChange.click();
 }
 
-function setRowNewData(row: HTMLElement, newData: ProgramData) {
-    (row.getElementsByClassName("id-cell")[0] as HTMLElement).innerText = "" + newData.id;
-    (row.getElementsByClassName("program-name-text")[0] as HTMLElement).innerText = newData.programName;
-    const hours = Math.floor(newData.duration / 3600000);
-    const mins = Math.floor((newData.duration - hours * 3600000) / 60000);
-    (row.getElementsByClassName("duration-text")[0] as HTMLElement).innerText = (hours > 0 ? hours + "ч. " : "") +
-        (mins > 0 || hours === 0 ? mins + "мин." : "");
-
-    const nameInput = row.getElementsByClassName("program-name-input")[0] as HTMLInputElement;
-    nameInput.setAttribute("value", newData.programName);
-    const hoursInput = row.getElementsByClassName("duration-hours")[0] as HTMLInputElement;
-    hoursInput.setAttribute("value", "" + hours);
-    const minsInput = row.getElementsByClassName("duration-mins")[0] as HTMLInputElement;
-    minsInput.setAttribute("value", "" + mins);
+function onChangeBtnClick(event: MouseEvent) {
+    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
+    row.classList.add("_changed");
 }
 
-function setRowOldData(row: HTMLElement) {
-    const nameInput = row.getElementsByClassName("program-name-input")[0] as HTMLInputElement;
-    nameInput.value = nameInput.getAttribute("value");
-    const hoursInput = row.getElementsByClassName("duration-hours")[0] as HTMLInputElement;
-    hoursInput.value = hoursInput.getAttribute("value");
-    const minsInput = row.getElementsByClassName("duration-mins")[0] as HTMLInputElement;
-    minsInput.value = minsInput.getAttribute("value");
+function onCancelBtnClick(event: MouseEvent) {
+    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
+    const rowElems = getRowElems(row);
+    if (rowElems.id.innerText) {
+        row.classList.remove("_changed");
+        const program = programs.find((item) => item.id + "" === rowElems.id.innerText);
+        const duration = convertDuration(program.duration);
+        rowElems.nameChangeElem.value = program.name;
+        rowElems.durationChangeElemHours.value = duration.hours + "";
+        rowElems.durationChangeElemMins.value = duration.mins + "";
+    }
+    else row.parentElement.removeChild(row);
 }
 
-class ProgramData {
+async function onDeleteBtnClick(event: MouseEvent) {
+    if (!confirm("Хорошо подумали?")) return;
+    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
+    const rowElems = getRowElems(row);
+    await fetch("/api/program/delete.php?id=" + rowElems.id.innerText, { method: "delete" });
+    programs = programs.filter((item) => item.id + "" !== rowElems.id.innerText);
+    row.parentElement.removeChild(row);
+}
+
+async function onSaveBtnClick(event: MouseEvent) {
+    const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
+    const rowElems = getRowElems(row);
+    const duration = +rowElems.durationChangeElemHours.value * 3600000 + +rowElems.durationChangeElemMins.value * 60000;
+    if (rowElems.id.innerText) {
+
+        await fetch(`/api/program/change.php`, {
+            method: "put",
+            body: JSON.stringify({
+                id: +rowElems.id.innerText,
+                name: rowElems.nameChangeElem.value,
+                duration
+            })
+        });
+    } else {
+        rowElems.id.innerText = "" + await (await fetch(`/api/program/add.php`, {
+            method: "post",
+            body: JSON.stringify({
+                name: rowElems.nameChangeElem.value,
+                duration
+            })
+        })).json();
+    }
+    const durationObj = convertDuration(duration);
+    rowElems.nameValue.innerText = rowElems.nameChangeElem.value;
+    rowElems.durationValue.innerText = durationObj.str;
+    row.classList.remove("_changed");
+}
+
+class Program {
     id: number;
-    programName: string;
+    name: string;
     duration: number;
 }

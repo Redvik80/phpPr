@@ -7,12 +7,16 @@ module.exports = {
         "client/onlineTV": './pages/client/onlineTV/onlineTV.ts',
         "client/programTV": './pages/client/programTV/programTV.ts',
         "admin/home": './pages/admin/home/home.ts',
+        "admin/programs": './pages/admin/programs/programs.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
     },
     devtool: 'inline-source-map',
+    resolve: {
+        extensions: [".ts", ".js"]
+    },
     module: {
         rules: [
             {

@@ -1,9 +1,10 @@
 <nav id="page-navigation">
     <?
         $links = [
-            ["url" => "/", "name" => "Главная"],
-            ["url" => "/pages/client/programTV/programTV.php", "name" => "Программа TV"],
-            ["url" => "/pages/client/onlineTV/onlineTV.php", "name" => "Прямой эфир"]
+            ["url" => "/pages/admin/home/home.php", "name" => "Главная"],
+            ["url" => "/pages/admin/programs/programs.php", "name" => "Телепередачи"],
+            ["url" => "/pages/admin/scheldule/scheldule.php", "name" => "Расписание"],
+            ["url" => "/pages/admin/commonSettings/commonSettings.php", "name" => "Общие настройки"]
         ];
         foreach($links as $link) {
             echo sprintf(

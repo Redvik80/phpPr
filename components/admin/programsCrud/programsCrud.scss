@@ -1,66 +1,70 @@
-.programs-crud-table {
-    border-spacing: 0;
-    border-collapse: collapse;
-    width: 100%;
+.programs-crud-component {
+    .table {
+        >.table__head {
+            display: flex;
+        }
 
-    tr {
+        >.table__body {
+            max-height: calc(100vh - 50px);
+            overflow-y: auto;
 
-        &.changed {
+            >.table__row {
+                display: flex;
+                margin-bottom: 5px;
+                border: solid 1px rgb(175, 175, 175);
 
-            .program-name-text,
-            .duration-text,
-            .buttons-container .change,
-            .buttons-container .delete {
-                display: none;
+                &._changed {
+
+                    .table__cell-value,
+                    .table__btn._change,
+                    .table__btn._delete {
+                        display: none;
+                    }
+                }
+
+                &:not(._changed) {
+
+                    .table__cell-change-elem,
+                    .table__cell-change-elem-container,
+                    .table__btn._cancel,
+                    .table__btn._save {
+                        display: none;
+                    }
+                }
             }
         }
 
-        &:not(.changed) {
-
-            .program-name-input,
-            .duration-inputs,
-            .buttons-container .save,
-            .buttons-container .cancel {
-                display: none;
-            }
+        .table__content-cells-container {
+            display: flex;
+            width: calc(100% - 90px);
         }
 
-        >td {
+        .table__cell {
             padding: 5px;
-
-            &:not(.buttons-container) {
-                border: solid 2px rgb(175, 175, 175);
-            }
-        }
-
-        >th {
-            padding: 5px;
-        }
-
-        .program-name-input {
-            width: 100%;
-        }
-
-        .duration-cell {
-            width: 210px;
-
-            .duration-mins,
-            .duration-hours {
-                width: 70px;
-                margin-right: 2px;
-            }
-        }
-
-        .buttons-container {
-            width: 90px;
-            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            flex-wrap: wrap;
 
-            >button {
-                padding: 1px;
-                width: 30px;
-                height: 30px;
-                font-size: 20px;
+            &._id {
+                width: 100px;
+            }
+
+            &._name {
+                flex-grow: 1;
+
+                >.table__cell-change-elem {
+                    width: 100%;
+                }
+            }
+
+            &._duration {
+                width: 210px;
+            }
+
+            &._btns {
+                width: 90px;
             }
         }
     }
