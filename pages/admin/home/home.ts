@@ -1,2 +1,2 @@
 import "./home.scss";
-import "../../../components/admin/programsAdsCrud/programsAdsCrud.ts";
+import "../../../components/admin/advertisingCrud/advertisingCrud.ts";

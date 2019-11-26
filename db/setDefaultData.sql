@@ -27,7 +27,7 @@ CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
             advertising_is_block := NOT advertising_is_block;
             INSERT INTO advertising VALUES(
                 DEFAULT, CONCAT('Санта-Барбара часть 10', i), 'Не смотрел, не знаю',
-                2019, NULL, advertising_is_block, i - 99
+                2019, '', advertising_is_block, i - 99
             );
         END LOOP;
     END;

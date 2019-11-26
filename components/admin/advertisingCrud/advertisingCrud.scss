@@ -1,4 +1,4 @@
-.programs-crud-component {
+.advertising-crud-component {
     .table {
         >.table__head {
             display: flex;
@@ -27,7 +27,12 @@
                     .table__cell-change-elem,
                     .table__cell-change-elem-container,
                     .table__btn._cancel,
-                    .table__btn._save {
+                    .table__btn._save,
+                    .table__cell._description,
+                    .table__cell._img,
+                    .table__btn._order-minus,
+                    .table__btn._order-plus,
+                    .table__btn._block {
                         display: none;
                     }
                 }
@@ -37,6 +42,7 @@
         .table__content-cells-container {
             display: flex;
             width: calc(100% - 90px);
+            flex-wrap: wrap;
         }
 
         .table__cell {
@@ -52,15 +58,29 @@
             }
 
             &._name {
-                flex-grow: 1;
+                width: calc(100% - 200px);
 
                 >.table__cell-change-elem {
                     width: 100%;
                 }
             }
 
-            &._duration {
-                width: 210px;
+            &._year {
+                width: 100px;
+            }
+
+            &._description {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+
+                >.table__cell-change-elem {
+                    width: 100%;
+                }
+            }
+
+            &._img {
+                width: 50%;
             }
 
             &._btns {

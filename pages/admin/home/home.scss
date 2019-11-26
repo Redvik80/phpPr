@@ -1,2 +1,10 @@
 @import "../global.scss";
-@import "../../../components/admin/programsAdsCrud/programsAdsCrud.scss";
+@import "../../../components/admin/advertisingCrud/advertisingCrud.scss";
+
+body {
+    display: flex;
+
+    >.advertising-crud-component {
+        flex-grow: 1;
+    }
+}

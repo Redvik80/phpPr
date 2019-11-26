@@ -12,7 +12,7 @@
 
 <body>
     <?include "../../../components/admin/navigation/navigation.php"?>
-    <?include "../../../components/admin/programsAdsCrud/programsAdsCrud.php"?>
+    <?include "../../../components/admin/advertisingCrud/advertisingCrud.php"?>
 </body>
 
 </html>

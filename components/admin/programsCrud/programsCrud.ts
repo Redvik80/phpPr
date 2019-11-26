@@ -12,9 +12,7 @@ fetch(`/api/program/getAll.php`).then((resp) => resp.json()).then((data) => {
     programs = data;
     for (let program of programs) rowsContainer.insertAdjacentHTML("beforeend", createRow(program));
     for (let i = 0; i < rows.length; i++) addEventListenersToRow(rows[i]);
-}
-
-);
+});
 
 function getRowElems(row: HTMLElement) {
     return {
@@ -84,8 +82,9 @@ function onAddBtnClick() {
         name: "",
         duration: 3600000
     }
-    rowsContainer.insertAdjacentHTML("afterbegin", createRow(newProgram));
-    const newRow = rowsContainer.firstElementChild as HTMLElement;
+    rowsContainer.insertAdjacentHTML("beforeend", createRow(newProgram));
+    rowsContainer.scrollTop = rowsContainer.scrollHeight;
+    const newRow = rowsContainer.lastElementChild as HTMLElement;
     addEventListenersToRow(newRow);
     getRowElems(newRow).btnChange.click();
 }
@@ -123,23 +122,28 @@ async function onSaveBtnClick(event: MouseEvent) {
     const rowElems = getRowElems(row);
     const duration = +rowElems.durationChangeElemHours.value * 3600000 + +rowElems.durationChangeElemMins.value * 60000;
     if (rowElems.id.innerText) {
-
+        const changedProgram = {
+            id: +rowElems.id.innerText,
+            name: rowElems.nameChangeElem.value,
+            duration
+        };
         await fetch(`/api/program/change.php`, {
             method: "put",
-            body: JSON.stringify({
-                id: +rowElems.id.innerText,
-                name: rowElems.nameChangeElem.value,
-                duration
-            })
+            body: JSON.stringify(changedProgram)
         });
+        programs = programs.map((item) => item.id === changedProgram.id ? changedProgram : item);
     } else {
-        rowElems.id.innerText = "" + await (await fetch(`/api/program/add.php`, {
+        const newProgram = {
+            id: null,
+            name: rowElems.nameChangeElem.value,
+            duration
+        }
+        newProgram.id = await (await fetch(`/api/program/add.php`, {
             method: "post",
-            body: JSON.stringify({
-                name: rowElems.nameChangeElem.value,
-                duration
-            })
+            body: JSON.stringify(newProgram)
         })).json();
+        rowElems.id.innerText = "" + newProgram.id;
+        programs.push(newProgram);
     }
     const durationObj = convertDuration(duration);
     rowElems.nameValue.innerText = rowElems.nameChangeElem.value;
