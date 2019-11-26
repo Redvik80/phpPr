@@ -170,8 +170,8 @@ async function onSaveBtnClick(event: MouseEvent) {
     const rowElems = getRowElems(row);
     let newOrder: number;
     let oldOrder: number;
-    for (let i = 1; i <= rows.length; i++) if (rows[i] === row) {
-        newOrder = i;
+    for (let i = 0; i < rows.length; i++) if (rows[i] === row) {
+        newOrder = i + 1;
         break;
     }
     for (let item of advertisings) if (item.id === +rowElems.id.innerText) {
