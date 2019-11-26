@@ -1,12 +1,12 @@
 <?
-    $imagesDirRoot = "files/images/";
+    $imagesDirRoot = "../../files/images/";
 
     function getExtension($mimeType) {
         $extensions = [
             'image/jpeg' => '.jpeg',
             'text/png' => '.png'
         ];
-        return $extensions[$mime_type];
+        return $extensions[$mimeType];
     }
 
     function saveImage($imageDataUrl) {
@@ -21,7 +21,7 @@
 
     function delImage($fileName) {
         global $imagesDirRoot;
-        if (file_exists($imagesDirRoot . $fileName)) {
+        if ($fileName && file_exists($imagesDirRoot . $fileName)) {
             unlink($imagesDirRoot . $fileName);
         }
     }

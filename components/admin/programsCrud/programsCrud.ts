@@ -83,10 +83,10 @@ function onAddBtnClick() {
         duration: 3600000
     }
     rowsContainer.insertAdjacentHTML("beforeend", createRow(newProgram));
-    rowsContainer.scrollTop = rowsContainer.scrollHeight;
     const newRow = rowsContainer.lastElementChild as HTMLElement;
     addEventListenersToRow(newRow);
     getRowElems(newRow).btnChange.click();
+    setTimeout(() => rowsContainer.scrollTop = rowsContainer.scrollHeight);
 }
 
 function onChangeBtnClick(event: MouseEvent) {

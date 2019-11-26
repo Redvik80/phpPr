@@ -32,6 +32,6 @@ export function setCurrentInputImgValue(element: HTMLElement, value: string) {
 }
 
 export function getNewInputImgValue(element: HTMLElement) {
-    return element.dataset.value;
+    return element.dataset.newValue;
 }
 

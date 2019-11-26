@@ -1,5 +1,9 @@
 export { };
 
+import { createInputImg, setCurrentInputImgValue, getNewInputImgValue } from "../input-img/input-img";
+
+const imagesUrlRoot = "/files/images/";
+
 const comp = document.getElementsByClassName("advertising-crud-component")[0] as HTMLElement;
 const addBtn = comp.querySelector(".table__btn._add") as HTMLButtonElement;
 const rowsContainer = comp.getElementsByClassName("table__body")[0] as HTMLElement;
@@ -10,7 +14,12 @@ addBtn.addEventListener("click", onAddBtnClick);
 
 fetch(`/api/advertising/getAll.php`).then((resp) => resp.json()).then((data) => {
     advertisings = data;
-    for (let ad of advertisings) rowsContainer.insertAdjacentHTML("beforeend", createRow(ad));
+    for (let ad of advertisings) {
+        rowsContainer.insertAdjacentHTML("beforeend", createRow(ad));
+        const inpImg = rows[rows.length - 1].getElementsByClassName("input-img")[0] as HTMLElement;
+        createInputImg(inpImg);
+        if (ad.img_file_name) setCurrentInputImgValue(inpImg, imagesUrlRoot + ad.img_file_name);
+    }
     for (let i = 0; i < rows.length; i++) addEventListenersToRow(rows[i]);
 });
 
@@ -28,7 +37,8 @@ function getRowElems(row: HTMLElement) {
         btnCancel: row.querySelector(".table__btn._cancel") as HTMLButtonElement,
         btnOrderPlus: row.querySelector(".table__btn._order-plus") as HTMLButtonElement,
         btnOrderMinus: row.querySelector(".table__btn._order-minus") as HTMLButtonElement,
-        btnBlock: row.querySelector(".table__btn._block") as HTMLButtonElement
+        btnBlock: row.querySelector(".table__btn._block") as HTMLButtonElement,
+        inputImg: row.querySelector(".table__cell._img .table__cell-change-elem") as HTMLElement
     }
 }
 
@@ -81,6 +91,7 @@ function createRow(ad: Advertising) {
             </div>
             <div class="table__cell _img">
                 <div>Изображение</div>
+                <div class="input-img table__cell-change-elem"></div>
             </div>
         </div>
         <div class="table__cell _btns">
@@ -106,10 +117,11 @@ function onAddBtnClick() {
         year: (new Date).getFullYear()
     }
     rowsContainer.insertAdjacentHTML("beforeend", createRow(newAd));
-    rowsContainer.scrollTop = rowsContainer.scrollHeight;
     const newRow = rowsContainer.lastElementChild as HTMLElement;
     addEventListenersToRow(newRow);
+    createInputImg(newRow.getElementsByClassName("input-img")[0] as HTMLElement);
     getRowElems(newRow).btnChange.click();
+    setTimeout(() => rowsContainer.scrollTop = rowsContainer.scrollHeight);
 }
 
 function onChangeBtnClick(event: MouseEvent) {
@@ -191,7 +203,8 @@ async function onSaveBtnClick(event: MouseEvent) {
             year: +rowElems.yearChangeElem.value,
             img_file_name: "",
             is_block: row.dataset.isBlock === "true" ? true : false,
-            order: newOrder
+            order: newOrder,
+            newImg: getNewInputImgValue(rowElems.inputImg)
         }
         await fetch(`/api/advertising/change.php`, {
             method: "put",
@@ -206,7 +219,8 @@ async function onSaveBtnClick(event: MouseEvent) {
             year: +rowElems.yearChangeElem.value,
             img_file_name: "",
             is_block: row.dataset.isBlock === "true" ? true : false,
-            order: newOrder
+            order: newOrder,
+            newImg: getNewInputImgValue(rowElems.inputImg)
         }
         newAd.id = await (await fetch(`/api/advertising/add.php`, {
             method: "post",
@@ -250,5 +264,6 @@ class Advertising {
     description: string;
     img_file_name: string;
     is_block: boolean;
-    order: number
+    order: number;
+    newImg?: string;
 }
