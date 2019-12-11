@@ -19,6 +19,7 @@ module.exports = {
     entry: {
         "home-advertising": './pages/home-advertising/home-advertising.ts',
         "programs": './pages/programs/programs.ts',
+        "scheldule": './pages/scheldule/scheldule.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
