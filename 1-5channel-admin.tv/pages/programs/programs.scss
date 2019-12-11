@@ -1,0 +1,10 @@
+@import "../global.scss";
+@import "../../components/programsCrud/programsCrud.scss";
+
+body {
+    display: flex;
+
+    >.programs-crud-component {
+        flex-grow: 1;
+    }
+}

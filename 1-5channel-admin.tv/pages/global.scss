@@ -1,0 +1,57 @@
+@import "../../components/navigation/navigation.scss";
+
+body {
+    margin: 0;
+    display: flex;
+    font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
+
+    #page-navigation {
+        margin-right: 5px;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input,
+textarea {
+    padding: 5px;
+    border: solid 1px rgb(200, 200, 200);
+    border-radius: 3px;
+    resize: none;
+
+    &:focus {
+        border-color: black;
+        outline: none;
+    }
+}
+
+button,
+.button {
+    background-color: rgb(75, 75, 75);
+    color: rgb(200, 200, 200);
+    border: rgb(100, 100, 100) outset 2px;
+    border-radius: 3px;
+    text-align: center;
+
+    &:hover {
+        background-color: rgb(60, 60, 60);
+        color: white;
+    }
+
+    &:active {
+        background: black;
+        color: white;
+        border-style: inset;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &.pi {
+        padding: 3px;
+        font-size: 20px;
+    }
+}

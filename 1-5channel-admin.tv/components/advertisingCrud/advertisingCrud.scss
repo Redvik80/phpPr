@@ -1,0 +1,121 @@
+@import "../input-img/input-img.scss";
+
+.advertising-crud-component {
+    padding: 5px;
+
+    .table {
+        >.table__head {
+            display: flex;
+        }
+
+        >.table__body {
+            max-height: calc(100vh - 50px);
+            overflow-y: auto;
+
+            >.table__row {
+                display: flex;
+                margin-bottom: 5px;
+                border: solid 1px rgb(175, 175, 175);
+
+                &._changed {
+                    background-color: rgba(128, 128, 128, 0.1);
+
+                    .table__cell:not(._id) .table__cell-value,
+                    .table__btn._change,
+                    .table__btn._delete {
+                        display: none;
+                    }
+                }
+
+                &:not(._changed) {
+
+                    .table__cell-change-elem,
+                    .table__cell-change-elem-container,
+                    .table__btn._cancel,
+                    .table__btn._save,
+                    .table__cell._description,
+                    .table__cell._img,
+                    .table__btn._order-minus,
+                    .table__btn._order-plus,
+                    .table__btn._block {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .table__content-cells-container {
+            display: flex;
+            width: calc(100% - 90px);
+            flex-wrap: wrap;
+        }
+
+        .table__cell {
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-wrap: wrap;
+
+            &._id {
+                width: 100px;
+            }
+
+            &._name {
+                width: calc(100% - 200px);
+
+                >.table__cell-change-elem {
+                    width: 100%;
+                }
+            }
+
+            &._year {
+                width: 100px;
+            }
+
+            &._description {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+
+                >.table__cell-change-elem {
+                    width: 100%;
+                    height: 155px;
+                }
+            }
+
+            &._img {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+
+                >.table__cell-change-elem {
+                    width: 100%;
+                    height: 200px;
+                }
+            }
+
+            &._btns {
+                width: 90px;
+                align-content: flex-start;
+
+                >button {
+                    margin: 3px;
+                }
+            }
+        }
+    }
+}
+
+.ql-toolbar {
+    background-color: white;
+    width: 100%;
+    text-align: start;
+}
+
+.ql-container {
+    background-color: white;
+}
