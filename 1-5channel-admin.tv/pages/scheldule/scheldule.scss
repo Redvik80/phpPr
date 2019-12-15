@@ -1,9 +1,85 @@
 @import "../global.scss";
+@import "../../components/input-find/input-find.scss";
 
 body {
     display: flex;
 
     >.scheldule-crud-container {
         flex-grow: 1;
+        padding: 5px;
+
+        .table__btn._cancel,
+        .table__btn._save {
+            display: none;
+        }
+
+        &._changed {
+
+            .table__btn._cancel,
+            .table__btn._save {
+                display: block;
+            }
+        }
+
+        .table {
+            >.table__head {
+                display: flex;
+
+                .table__cell {
+                    align-items: flex-end;
+                }
+            }
+
+            >.table__body {
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+
+                >.table__row {
+                    display: flex;
+                    margin-bottom: 5px;
+                    border: solid 1px rgb(175, 175, 175);
+                }
+            }
+
+            .table__content-cells-container {
+                display: flex;
+                width: calc(100% - 160px);
+                flex-wrap: wrap;
+            }
+
+            .table__cell {
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+
+                &._time {
+                    width: 70px;
+                }
+
+                &._program-name {
+                    flex-grow: 1;
+                }
+
+                &._program-duration {
+                    width: 180px;
+                }
+
+                &._btns {
+                    width: 160px;
+                    justify-content: flex-end;
+                    flex-wrap: wrap;
+
+                    >input {
+                        width: 100%;
+                    }
+
+                    >button {
+                        margin: 3px;
+                    }
+                }
+            }
+        }
     }
 }

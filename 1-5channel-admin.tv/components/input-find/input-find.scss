@@ -1,0 +1,35 @@
+.input-find {
+    width: 100%;
+    position: relative;
+
+    >input {
+        width: 100%;
+    }
+
+    >.input-find__values-container {
+        position: absolute;
+        z-index: 1;
+        max-height: 275px;
+        overflow-x: auto;
+        display: none;
+        width: 100%;
+        background-color: white;
+
+        &._visible {
+            display: block;
+        }
+
+        >.input-find__values-item {
+            text-align: left;
+            font-size: smaller;
+            padding-left: 5px;
+            background-color: rgba(128, 128, 128, 0.1);
+            margin-top: 1px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: rgba(128, 128, 128, 0.3);
+            }
+        }
+    }
+}
