@@ -54,7 +54,7 @@ class ScheldulePage {
                 item.program = this.programs.find((item2) => item2.id === item.program_id);
                 this.addRow(item);
             }
-            this.getOrdersTime();
+            this.setAllRowsTime();
         });
     }
 
@@ -69,7 +69,9 @@ class ScheldulePage {
                         <div class="table__cell-change-elem"></div>
                     </div>
                     <div class="table__cell _program-duration">
-                        <div class="table__cell-value">${this.convertDuration(schelduleItem.program.duration).str}</div>
+                        <div class="table__cell-value">
+                            ${schelduleItem.program ? this.convertDuration(schelduleItem.program.duration).str : "0мин."}
+                        </div>
                     </div>
                 </div>
                 <div class="table__cell _btns">
@@ -113,25 +115,42 @@ class ScheldulePage {
         this.html.root.classList.remove("_changed");
     }
 
-    onAddBtnClick() { }
+    onAddBtnClick() {
+        this.html.root.classList.add("_changed");
+        const newShelduleItem: SchelduleItem = {
+            date: +new Date(this.html.dateInput.value),
+            order: this.rows.length + 1,
+            program_id: null,
+            program: null,
+            id: null
+        }
+        this.schelduleItems.push(newShelduleItem);
+        this.addRow(newShelduleItem);
+        this.setLastRowTime();
+        this.html.rowsContainer.scrollTop = this.html.rowsContainer.scrollHeight;
+    }
 
     onSelectProgram(row: Row) {
         this.html.root.classList.add("_changed");
-        row.value.program = (event as CustomEvent).detail.value;
-        row.value.program_id = row.value.program.id;
-        row.html.programDurationValue.innerText = this.convertDuration(row.value.program.duration).str;
+        const newProgram: Program = (event as CustomEvent).detail.value;
+        for (let item of this.rows) {
+            if (item.value.order > row.value.order) {
+                if (row.value.program) this.rowTimeMinus(item, row.value.program.duration);
+                this.rowTimePlus(item, newProgram.duration);
+            }
+        }
+        row.value.program = newProgram;
+        row.value.program_id = newProgram.id;
+        row.html.programDurationValue.innerText = this.convertDuration(newProgram.duration).str;
     }
 
     onOrderPlusBtnClick(row: Row) {
         const rowArrIdx = this.rows.findIndex((item) => item.value.id === row.value.id);
-
         if (rowArrIdx < this.rows.length - 2) {
             row.html.root.parentElement.insertBefore(row.html.root, this.rows[rowArrIdx + 2].html.root);
-            console.log(this.rows[rowArrIdx + 2].html.root)
         } else if (rowArrIdx < this.rows.length - 1) {
             row.html.root.parentElement.appendChild(row.html.root);
         }
-
         if (rowArrIdx < this.rows.length - 1) {
             this.html.root.classList.add("_changed");
             const nextRow = this.rows[rowArrIdx + 1];
@@ -139,14 +158,13 @@ class ScheldulePage {
             this.rows[rowArrIdx] = nextRow;
             row.value.order++;
             nextRow.value.order--;
-            this.rowTimePlus(row, nextRow.value.program.duration);
-            this.rowTimeMinus(nextRow, row.value.program.duration);
+            if (nextRow.value.program) this.rowTimePlus(row, nextRow.value.program.duration);
+            if (row.value.program) this.rowTimeMinus(nextRow, row.value.program.duration);
         }
     }
 
     onOrderMinusBtnClick(row: Row) {
-        const rowArrIdx = this.rows.findIndex((item) => item.value.id === row.value.id);
-
+        const rowArrIdx = this.rows.findIndex((item) => item === row);
         if (rowArrIdx > 0) {
             this.html.root.classList.add("_changed");
             const previousRow = this.rows[rowArrIdx - 1];
@@ -155,23 +173,22 @@ class ScheldulePage {
             this.rows[rowArrIdx] = previousRow;
             row.value.order--;
             previousRow.value.order++;
-            this.rowTimeMinus(row, previousRow.value.program.duration);
-            this.rowTimePlus(previousRow, row.value.program.duration);
+            if (previousRow.value.program) this.rowTimeMinus(row, previousRow.value.program.duration);
+            if (row.value.program) this.rowTimePlus(previousRow, row.value.program.duration);
         }
     }
 
     onDeleteBtnClick(row: Row) {
-        // if (!confirm("Хорошо подумали?")) return;
-        // const row = getButtonsRow(event.currentTarget as HTMLButtonElement);
-        // const rowElems = getRowElems(row);
-        // await fetch(backendAddress + "/api/advertising/delete.php?id=" + rowElems.id.innerText, { method: "delete" });
-        // advertisings = advertisings.filter((item) => item.id !== +rowElems.id.innerText);
-        // const rowOrder = +row.dataset.order;
-        // row.parentElement.removeChild(row);
-        // for (let i = 0; i < rows.length; i++) if (+rows[i].dataset.order > rowOrder) {
-        //     rows[i].dataset.order = +rows[i].dataset.order - 1 + "";
-        // }
-        // for (let item of advertisings) if (item.order > rowOrder) item.order--;
+        if (row.value.program && !confirm("Хорошо подумали?")) return;
+        this.html.root.classList.add("_changed");
+        row.html.root.parentElement.removeChild(row.html.root);
+        this.rows.splice(this.rows.findIndex((item) => item === row), 1);
+        for (let item of this.rows) {
+            if (item.value.order > row.value.order) {
+                item.value.order--;
+                if (row.value.program) this.rowTimeMinus(item, row.value.program.duration);
+            }
+        }
     }
 
     convertDuration(duration: number) {
@@ -181,7 +198,7 @@ class ScheldulePage {
         return { hours, mins, str }
     }
 
-    getOrdersTime() {
+    setAllRowsTime() {
         const time = {
             hours: 0,
             minutes: 0
@@ -194,6 +211,21 @@ class ScheldulePage {
                 time.hours++;
             }
         }
+    }
+
+    setLastRowTime() {
+        const previousRow = this.rows[this.rows.length - 2];
+        const timeArr = previousRow.html.timeValue.innerText.split(":");
+        const time = {
+            hours: +timeArr[0],
+            minutes: +timeArr[1]
+        };
+        time.minutes += Math.round((previousRow.value.program ? previousRow.value.program.duration : 0) / 60000);
+        while (time.minutes > 59) {
+            time.minutes -= 60;
+            time.hours++;
+        }
+        this.rows[this.rows.length - 1].html.timeValue.innerText = `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10 ? "0" : "") + time.minutes}`;
     }
 
     rowTimePlus(row: Row, duration: number) {
