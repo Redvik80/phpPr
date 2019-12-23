@@ -1,6 +1,6 @@
 <?
+    include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $db=pg_connect("host=localhost port=5432 dbname=phpDb user=postgres password=123");
         $resp = pg_fetch_all(pg_query($db, "SELECT * FROM advertising ORDER BY \"order\""));
         $newResp = [];
         foreach($resp as $item) {

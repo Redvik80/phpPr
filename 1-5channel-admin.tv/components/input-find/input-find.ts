@@ -48,11 +48,11 @@ export class InputFind<ItemType> {
             const newItem = { value: item, wordsQuantity: 0, arrIdx: idx };
             for (let word of words) {
                 if ((new RegExp(`^${word}[\\s.,-]+|[\\s.,-]+${word}[\\s.,-]+|[\\s.,-]+${word}$`, "i")).test(item[this.findField])) {
-                    newItem.wordsQuantity++
+                    newItem.wordsQuantity++;
                 };
             }
             return newItem;
-        }).filter((item) => item.wordsQuantity > 0);
+        }).filter((item) => item.wordsQuantity >= Math.ceil(words.length * 0.5));
         rezult.sort((item1, item2) => item2.wordsQuantity - item1.wordsQuantity);
         return rezult;
     }

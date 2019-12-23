@@ -1,7 +1,7 @@
 <?
-    include "../../utils/php/file.php";
+    include_once("../common.php");
+    include_once("../../utils/php/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $db=pg_connect("host=localhost port=5432 dbname=phpDb user=postgres password=123");
         $data = json_decode(file_get_contents('php://input'), true);
         $oldOrder =  pg_fetch_result(
             pg_query($db, 'SELECT count(*) FROM advertising')

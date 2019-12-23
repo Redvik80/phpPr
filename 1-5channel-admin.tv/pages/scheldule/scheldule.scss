@@ -38,6 +38,14 @@ body {
                     display: flex;
                     margin-bottom: 5px;
                     border: solid 1px rgb(175, 175, 175);
+
+                    &._excess {
+                        background-color: gray;
+
+                        .table__cell._time {
+                            color: transparent;
+                        }
+                    }
                 }
             }
 

@@ -1,9 +1,8 @@
 <?
-    include "../../utils/php/file.php";
+    include_once("../common.php");
+    include_once("../../utils/php/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-        $db=pg_connect("host=localhost port=5432 dbname=phpDb user=postgres password=123");
         $data = json_decode(file_get_contents('php://input'), true);
-
         $oldData = pg_query_params($db, 'SELECT "order", img_file_name FROM advertising WHERE id=$1', [$data['id']]);
         $oldOrder = pg_fetch_result($oldData, 0, 0) * 1;
         $data['img_file_name'] = pg_fetch_result($oldData, 0, 1);

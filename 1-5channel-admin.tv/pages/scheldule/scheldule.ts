@@ -16,6 +16,7 @@ class ScheldulePage {
 
     programs: Program[] = [];
     schelduleItems: SchelduleItem[] = [];
+    schelduleItemsBackup: string;
 
     rows: Row[] = [];
 
@@ -33,28 +34,50 @@ class ScheldulePage {
         this.html.addBtn.addEventListener("click", this.onAddBtnClick.bind(this));
         this.html.cancelBtn.addEventListener("click", this.onCancelBtnClick.bind(this));
         this.html.saveBtn.addEventListener("click", this.onSaveBtnClick.bind(this));
-        this.html.dateInput.value = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
-        this.html.dateInput.addEventListener("change", this.onDateChange.bind(this));
-        this.onDateChange();
+
+        // this.html.dateInput.value = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+        this.html.dateInput.value = "2019-11-22";
+
+        this.html.dateInput.addEventListener("change", () => {
+            this.updateScheldule();
+        });
+        this.updateScheldule();
     }
 
-    onDateChange() {
+    updateScheldule(schelduleItems: SchelduleItem[] = null) {
         if (!this.html.dateInput.value) return;
-        const pr1 = fetch(backendAddress + `/api/program/getAll.php`).then((resp) => resp.json());
-        const pr2 = fetch(
-            backendAddress + `/api/scheldule/getAll.php?date=` + +new Date(this.html.dateInput.value)
-        ).then((resp) => resp.json());
+
+        if (this.programs.length === 0) {
+            var pr1 = fetch(backendAddress + `/api/program/getAll.php`).then((resp) => resp.json());
+        } else {
+            var pr1 = new Promise((resolve) => resolve(this.programs)) as Promise<any>;
+        }
+
+        if (!schelduleItems) {
+            var pr2 = fetch(
+                backendAddress + `/api/scheldule/getAll.php?date=` + +new Date(this.html.dateInput.value)
+            ).then((resp) => resp.json());
+        } else {
+            var pr2 = new Promise((resolve) => resolve(schelduleItems)) as Promise<any>;
+        }
 
         Promise.all([pr1, pr2]).then((data) => {
             this.programs = data[0];
             this.schelduleItems = data[1];
+            this.schelduleItems.sort((item1, item2) => item1.order - item2.order);
 
             this.html.rowsContainer.innerHTML = "";
+            this.rows = [];
             for (let item of this.schelduleItems) {
                 item.program = this.programs.find((item2) => item2.id === item.program_id);
                 this.addRow(item);
             }
             this.setAllRowsTime();
+            this.schelduleItemsBackup = JSON.stringify(this.schelduleItems.map((item) => {
+                const newItem = { ...item };
+                delete newItem.program;
+                return newItem;
+            }));
         });
     }
 
@@ -108,11 +131,25 @@ class ScheldulePage {
         newRow.html.btnOrderMinus.addEventListener("click", this.onOrderMinusBtnClick.bind(this, newRow));
     }
 
-    onSaveBtnClick() {
+    async onSaveBtnClick() {
         this.html.root.classList.remove("_changed");
+        const newData: SchelduleItem[] = await (await fetch(
+            backendAddress + `/api/scheldule/change.php?date=` + +new Date(this.html.dateInput.value),
+            {
+                method: "PUT",
+                body: JSON.stringify(this.schelduleItems.filter((item) => item.program_id).map((item) => {
+                    const newItem = { ...item };
+                    delete newItem.program;
+                    return newItem;
+                }))
+            }
+        )).json();
+        this.updateScheldule(newData);
     }
+
     onCancelBtnClick() {
         this.html.root.classList.remove("_changed");
+        this.updateScheldule(JSON.parse(this.schelduleItemsBackup));
     }
 
     onAddBtnClick() {
@@ -183,6 +220,7 @@ class ScheldulePage {
         this.html.root.classList.add("_changed");
         row.html.root.parentElement.removeChild(row.html.root);
         this.rows.splice(this.rows.findIndex((item) => item === row), 1);
+        this.schelduleItems.splice(this.schelduleItems.findIndex((item) => item === row.value), 1);
         for (let item of this.rows) {
             if (item.value.order > row.value.order) {
                 item.value.order--;
@@ -205,6 +243,7 @@ class ScheldulePage {
         };
         for (let row of this.rows) {
             row.html.timeValue.innerText = `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10 ? "0" : "") + time.minutes}`;
+            this.checkTime(row);
             time.minutes += Math.round(row.value.program.duration / 60000);
             while (time.minutes > 59) {
                 time.minutes -= 60;
@@ -226,6 +265,7 @@ class ScheldulePage {
             time.hours++;
         }
         this.rows[this.rows.length - 1].html.timeValue.innerText = `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10 ? "0" : "") + time.minutes}`;
+        this.checkTime(this.rows[this.rows.length - 1]);
     }
 
     rowTimePlus(row: Row, duration: number) {
@@ -240,6 +280,7 @@ class ScheldulePage {
             time.hours++;
         }
         row.html.timeValue.innerText = `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10 ? "0" : "") + time.minutes}`;
+        this.checkTime(row);
     }
 
     rowTimeMinus(row: Row, duration: number) {
@@ -254,6 +295,22 @@ class ScheldulePage {
             time.hours--;
         }
         row.html.timeValue.innerText = `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10 ? "0" : "") + time.minutes}`;
+        this.checkTime(row);
+    }
+
+    checkTime(row: Row) {
+        const timeArr = row.html.timeValue.innerText.split(":");
+        const time = {
+            hours: +timeArr[0],
+            minutes: +timeArr[1]
+        };
+        time.minutes += Math.round(row.value.program ? row.value.program.duration / 60000 : 0);
+        while (time.minutes > 59) {
+            time.minutes -= 60;
+            time.hours++;
+        }
+        if (time.hours === 24 && time.minutes === 0 || time.hours < 24) row.html.root.classList.remove("_excess");
+        else row.html.root.classList.add("_excess");
     }
 }
 

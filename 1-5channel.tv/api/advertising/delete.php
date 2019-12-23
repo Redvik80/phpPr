@@ -1,8 +1,7 @@
 <?
-    include "../../utils/php/file.php";
+    include_once("../common.php");
+    include_once("../../utils/php/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-        $db=pg_connect("host=localhost port=5432 dbname=phpDb user=postgres password=123");
-
         $deletingRowData = pg_query_params($db, "SELECT \"order\", img_file_name FROM advertising WHERE id=$1", [$_GET['id']]);
         $deletingRowOrder = pg_fetch_result($deletingRowData, 0, 0);
         $deletingRowImgName = pg_fetch_result($deletingRowData, 0, 1);
