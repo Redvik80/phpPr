@@ -11,7 +11,9 @@ CREATE TABLE program(
     id SERIAL PRIMARY KEY,
     name VARCHAR(200),
     duration INT,
-    link TEXT
+    file_name VARCHAR(50),
+    youtube_id VARCHAR(50),
+    from_youtube BOOLEAN
 );
 
 CREATE TABLE scheldule(

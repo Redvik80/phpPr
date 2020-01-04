@@ -1,7 +1,0 @@
-DirectoryIndex pages/home/home.php
-
-RewriteEngine on
-RewriteRule ^home-advertising$ pages/home-advertising/home-advertising.php [L]
-RewriteRule ^programs$ pages/programs/programs.php [L]
-RewriteRule ^scheldule$ pages/scheldule/scheldule.php [L]
-RewriteRule ^common-settings$ pages/commonSettings/commonSettings.php [L]

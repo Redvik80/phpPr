@@ -1,9 +1,11 @@
 <?
     include_once("../common.php");
+    include_once("../../utils/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = json_decode(file_get_contents('php://input'), true);
-        echo pg_fetch_result(pg_query_params($db, "INSERT INTO program VALUES(DEFAULT, $1, $2, $3) RETURNING id",
-            [$data['name'], $data['duration'], $data['link']]
-        ), 0, 0);
+        $data['file_name'] = saveFile($data["newFile"]["dataUrl"], $data["newFile"]["extension"], $videosDirRoot);
+        pg_query_params($db, "INSERT INTO program VALUES(DEFAULT, $1, $2, $3, $4, $5)",
+            [$data['name'], $data['duration'], $data['file_name'], $data['youtube_id'], $data['from_youtube'] ? 1 : 0]
+        );
     }
 ?>
