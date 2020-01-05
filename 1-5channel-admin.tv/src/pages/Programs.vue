@@ -2,7 +2,7 @@
   <div class="comp-root">
     <div class="p-inputgroup find-container">
       <InputText
-        placeholder="Введите название программы или его часть"
+        placeholder="Введите название телепередачи или его часть"
         v-model="findText"
         @input="onInputFind()"
       />
@@ -33,7 +33,7 @@
     ></Paginator>
 
     <Dialog
-      :header="selectedProgram.id ? 'Изменение программы' : 'Создание программы'"
+      :header="selectedProgram.id ? 'Изменение телепередачи' : 'Создание телепередачи'"
       :visible.sync="showChangeDialogFlag"
       :closable="false"
       :modal="true"
@@ -102,7 +102,7 @@
       :closable="false"
       :modal="true"
     >
-      <div>Вы действительно хотите удалить эту программу?</div>
+      <div>Вы действительно хотите удалить эту телепередачу?</div>
       <template #footer>
         <Button icon="pi pi-trash" label="Удалить" @click="onConfirmDeleteBtnClick()" />
         <Button icon="pi pi-times" label="Отмена" @click="onCancelDeleteBtnClick()" />
@@ -380,8 +380,10 @@ export default class Programs extends Vue {
   .programs-list-header {
     display: flex;
     align-items: center;
+    margin-bottom: 5px;
   }
   .programs-list-container {
+    min-height: 380px;
     .programs-list-item {
       display: flex;
       align-items: center;

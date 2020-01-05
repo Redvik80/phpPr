@@ -13,8 +13,10 @@ import SelectButton from 'primevue/selectbutton';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Paginator from 'primevue/paginator';
+import Calendar from 'primevue/calendar';
+import Dropdown from 'primevue/dropdown';
 
-// import InputDuration from './components/InputDuration.vue';
+import ProgramsFindInput from './components/ProgramsFindInput.vue';
 import InputFile from './components/InputFile.vue';
 
 import 'primevue/resources/themes/nova-light/theme.css';
@@ -38,8 +40,10 @@ Vue.component('SelectButton', SelectButton);
 Vue.component('Toast', Toast);
 Vue.use(ToastService);
 Vue.component('Paginator', Paginator);
+Vue.component('Calendar', Calendar);
+Vue.component('Dropdown', Dropdown);
 
-// Vue.component('InputDuration', InputDuration);
+Vue.component('ProgramsFindInput', ProgramsFindInput);
 Vue.component('InputFile', InputFile);
 
 new Vue({

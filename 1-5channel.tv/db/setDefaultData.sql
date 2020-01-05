@@ -20,7 +20,7 @@ CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
             day_count := floor((i-100)/25);
             INSERT INTO program VALUES(DEFAULT, CONCAT('Санта-Барбара часть 10', i) , random_hours*0.5*60*60, '', '', TRUE)
                 RETURNING id INTO current_program_id;
-            INSERT INTO scheldule VALUES(DEFAULT, 1573603200 + 86400 * day_count, current_program_id, (i-100)%25 + 1);
+            INSERT INTO scheldule VALUES(DEFAULT, 1578096000 + 86400 * day_count, current_program_id, (i-100)%25);
         END LOOP;
 
         advertising_is_block := TRUE;
@@ -28,7 +28,7 @@ CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
             advertising_is_block := NOT advertising_is_block;
             INSERT INTO advertising VALUES(
                 DEFAULT, CONCAT('Санта-Барбара часть 10', i), 'Не смотрел, не знаю',
-                2019, '', advertising_is_block, i - 99
+                2019, '', advertising_is_block, i - 100
             );
         END LOOP;
 

@@ -30,7 +30,7 @@ export default class App extends Vue {
     },
     {
       label: "Расписание",
-      to: "/sheldule"
+      to: "/scheldule"
     },
     {
       label: "Общие настройки",
@@ -41,47 +41,50 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-.app-root {
-  display: flex;
-  .menu-container {
-    .p-menu {
-      .p-menitem {
-        .p-menuitem-link {
-          &:focus {
-            box-shadow: none;
-          }
-          &.router-link-active,
-          &.router-link-active:hover {
-            background-color: #007ad9;
-            .p-menuitem-text {
-              color: white;
+body {
+  margin: 10px;
+  .app-root {
+    display: flex;
+    .menu-container {
+      .p-menu {
+        .p-menitem {
+          .p-menuitem-link {
+            &:focus {
+              box-shadow: none;
+            }
+            &.router-link-active,
+            &.router-link-active:hover {
+              background-color: #007ad9;
+              .p-menuitem-text {
+                color: white;
+              }
             }
           }
         }
       }
+      .logout-btn {
+        display: block;
+        margin: 5px auto 0;
+      }
     }
-    .logout-btn {
+
+    .page-container {
+      flex-grow: 1;
+      margin-left: 10px;
+      height: calc(100vh - 20px);
+    }
+  }
+
+  .form-item-container {
+    > .label {
       display: block;
-      margin: 5px auto 0;
+      margin-bottom: 3px;
     }
+    > input {
+      display: block;
+      width: 100%;
+    }
+    margin-bottom: 10px;
   }
-
-  .page-container {
-    flex-grow: 1;
-    margin-left: 10px;
-    height: calc(100vh - 20px);
-  }
-}
-
-.form-item-container {
-  > .label {
-    display: block;
-    margin-bottom: 3px;
-  }
-  > input {
-    display: block;
-    width: 100%;
-  }
-  margin-bottom: 10px;
 }
 </style>

@@ -15,7 +15,6 @@
             }
         }
 
-
         $oldData = pg_fetch_all(pg_query_params($db, 'SELECT id FROM scheldule WHERE "date"=$1', [$_GET['date']]));
         foreach($oldData as $oldItem) {
             $oldItemDelete = true;
