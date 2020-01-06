@@ -1,6 +1,6 @@
 <?
     include_once("../common.php");
-    function getAll() {
+    function get() {
         global $db;
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') return "[]";
 
@@ -9,30 +9,28 @@
             "data" => []
         ];
         if (isset($_GET['cuted'])) {
-            $resp["data"] = pg_fetch_all(pg_query($db, "SELECT id, name, duration FROM program ORDER BY id"));
+            $resp["data"] = pg_fetch_all(pg_query($db, "SELECT id, title FROM banner ORDER BY id"));
         } else {
-            $resp["data"] = pg_fetch_all(pg_query($db, "SELECT * FROM program ORDER BY id"));
+            $resp["data"] = pg_fetch_all(pg_query($db, "SELECT * FROM banner ORDER BY id"));
         }
+
         $newData = [];
         foreach($resp["data"] as $item) {
             $item["id"] = $item["id"] * 1;
-            $item["duration"] = $item["duration"] * 1;
-            if (isset($item["from_youtube"])) $item["from_youtube"] = $item["from_youtube"] === "t";
             array_push($newData, $item);
         }
         $resp["data"] = $newData;
-
         $resp["totalQuantity"] = count($resp["data"]);
-        $findStr = mb_strtolower($_GET['find_str']);
-        if (mb_strlen($findStr) === 0) {
+
+        if (isset($_GET['find_str'])) {
+            $findStr = mb_strtolower($_GET['find_str']);
+        }
+        if (!isset($_GET['find_str']) || mb_strlen($findStr) === 0) {
             if (isset(($_GET['page']))) {
                 $resp["data"] = array_slice($resp["data"], ($_GET['page'] * 1 - 1) * 10, 10);
                 return json_encode($resp);
             } else {
-                return json_encode([
-                    "totalQuantity" => 0,
-                    "data" => []
-                ]);
+                return json_encode($resp);
             }
         }
 
@@ -49,10 +47,10 @@
 
         $newData = [];
         foreach($resp["data"] as $item) {
-            $programName = mb_strtolower($item["name"]);
+            $bannerTitle = mb_strtolower($item["title"]);
             $isValid = TRUE;
             foreach($words as $word) {
-                if (strrpos($programName, $word) === FALSE) {
+                if (strrpos($bannerTitle, $word) === FALSE) {
                     $isValid = FALSE;
                     break;
                 }
@@ -65,7 +63,6 @@
             $resp["data"] = array_slice($resp["data"], ($_GET['page'] * 1 - 1) * 10, 10);
         }
         return json_encode($resp);
-
     }
-    echo getAll();
+    echo get();
 ?>

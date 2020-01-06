@@ -3,9 +3,13 @@
 
 DROP TABLE IF EXISTS scheldule;
 DROP TABLE IF EXISTS program;
-DROP TABLE IF EXISTS advertising;
-DROP TABLE IF EXISTS "user";
+
+DROP TABLE IF EXISTS banner_page_relation;
+DROP TABLE IF EXISTS banner;
 DROP TABLE IF EXISTS page;
+
+DROP TABLE IF EXISTS common_settings;
+DROP TABLE IF EXISTS "user";
 
 CREATE TABLE program(
     id SERIAL PRIMARY KEY,
@@ -25,25 +29,39 @@ CREATE TABLE scheldule(
     FOREIGN KEY (program_id) REFERENCES program(id) ON DELETE CASCADE
 );
 
-CREATE TABLE advertising(
+CREATE TABLE banner(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(200),
-    description VARCHAR(2000),
-    year INT,
-    img_file_name VARCHAR(100),
-    is_block BOOLEAN,
-    "order" INT
+    title VARCHAR(200),
+    description TEXT,
+    file_name VARCHAR(100)
+);
+
+CREATE TABLE page(
+    id INT PRIMARY KEY,
+    navigation_name VARCHAR(100),
+    title VARCHAR(200),
+    description TEXT
+);
+
+CREATE TABLE banner_page_relation(
+    id SERIAL PRIMARY KEY,
+    banner_id INT,
+    page_id INT,
+
+    FOREIGN KEY (banner_id) REFERENCES banner(id) ON DELETE CASCADE,
+    FOREIGN KEY (page_id) REFERENCES page(id) ON DELETE CASCADE
+);
+
+CREATE TABLE common_settings(
+    head_title VARCHAR(200),
+    favicon_file_name VARCHAR(100),
+    logo_file_name VARCHAR(100)
 );
 
 CREATE TABLE "user"(
     id SERIAL PRIMARY KEY,
-    login VARCHAR(25),
+    login VARCHAR(50),
     passhash CHAR(32),
     access_token CHAR(13),
     csrf_token CHAR(13)
-);
-
-CREATE TABLE page(
-    name VARCHAR(50) PRIMARY KEY,
-    data JSON DEFAULT '{}'
 );

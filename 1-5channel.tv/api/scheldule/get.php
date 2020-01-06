@@ -1,7 +1,12 @@
 <?
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $resp = pg_fetch_all(pg_query_params($db, "SELECT * FROM scheldule NATURAL JOIN program WHERE \"date\"=$1 ORDER BY \"order\"", [$_GET['date'] * 1]));
+        $resp = pg_fetch_all(pg_query_params($db,
+            "SELECT * " .
+            "FROM scheldule INNER JOIN program ON scheldule.program_id=program.id " .
+            "WHERE \"date\"=$1 ORDER BY \"order\"",
+            [$_GET['date'] * 1]
+        ));
         $newResp = [];
         foreach($resp as $item) {
             $item["id"] = $item["id"] * 1;

@@ -2,7 +2,6 @@
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $newData = json_decode(file_get_contents('php://input'), true);
-
         for ($i = 0;  $i < count($newData); $i++) {
             if (!$newData[$i]["id"]) {
                 $newData[$i]["id"] = pg_fetch_result(pg_query_params($db, 'INSERT INTO scheldule VALUES (DEFAULT, $1, $2, $3) RETURNING id',

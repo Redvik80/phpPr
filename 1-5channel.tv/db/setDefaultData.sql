@@ -3,17 +3,18 @@
 
 DELETE FROM scheldule;
 DELETE FROM program;
-DELETE FROM advertising;
+DELETE FROM banner;
 DELETE FROM page;
 
-DROP FUNCTION set_default_data;
+DROP FUNCTION IF EXISTS set_default_data;
 
 CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
     DECLARE
-    random_hours FLOAT;
-    day_count INT;
-    current_program_id INT;
-    advertising_is_block BOOLEAN;
+        random_hours FLOAT;
+        day_count INT;
+        current_program_id INT;
+        current_banner_id INT;
+
     BEGIN
         FOR i IN 100..399 LOOP
             SELECT floor(random() * 4 + 1) INTO random_hours;
@@ -23,32 +24,28 @@ CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
             INSERT INTO scheldule VALUES(DEFAULT, 1578096000 + 86400 * day_count, current_program_id, (i-100)%25);
         END LOOP;
 
-        advertising_is_block := TRUE;
-        FOR i IN 100..109 LOOP
-            advertising_is_block := NOT advertising_is_block;
-            INSERT INTO advertising VALUES(
-                DEFAULT, CONCAT('Санта-Барбара часть 10', i), 'Не смотрел, не знаю',
-                2019, '', advertising_is_block, i - 100
-            );
+        INSERT INTO page VALUES
+            (1, 'Главная', 'page 001', '001'),
+            (2, 'Программа телепередач', 'page 002', '002'),
+            (3, 'Online TV', 'page 003', '003');
+
+        FOR i IN 100..119 LOOP
+            INSERT INTO banner VALUES(
+                DEFAULT, CONCAT('Санта-Барбара часть 10', i), 'Не смотрел, не знаю', ''
+            ) RETURNING id INTO current_banner_id;
+            IF i < 110 THEN
+                INSERT INTO banner_page_relation VALUES(
+                    DEFAULT, current_banner_id, 1
+                );
+                IF i < 105 THEN
+                    INSERT INTO banner_page_relation VALUES(
+                        DEFAULT, current_banner_id, 3
+                    );
+                END IF;
+            END IF;
         END LOOP;
 
-        INSERT INTO page VALUES
-        (
-            'home',
-            '{
-                "title1": "Добро пожаловать",
-                "description1": "Кружится голова от разнообразия контента на YouTube? На выбор тратишь больше времени, чем на просмотр, а за тебя выбрать некому? Если это так, то ты обратился по адресу. 1,5 канал - первый в мире телеканал, крутящий ролики с YouTube. Шикарно, да? Можешь не отвечать, я это и так знаю. Тебе больше не при придётся выбирать среди тысяч одинаково тупых роликов. Мы зделаем этот сложный выбор за тебя! Всё что от тебя требуется это включить наш телеканал и смотреть не отвлекаясь, пока руки не начнут трястись от голода. Да, да, мечты сбываются. Приятного просмотра.",
-                "title2": "Скоро на 1,5 канале",
-                "description2": "Не пропустите..."
-            }'
-        ),(
-            'commonSettings',
-            '{
-                "logo": null,
-                "favicon": null,
-                "title": "1,5 канал"
-            }'
-        );
+        INSERT INTO common_settings VALUES('1,5 канал', '', '');
     END;
 $BODY$ LANGUAGE 'plpgsql' VOLATILE;
 
