@@ -189,7 +189,7 @@ export default class Programs extends Vue {
 
   getPrograms() {
     this.$http
-      .get(httpS.resources.program.getAll, {
+      .get(httpS.resources.program.get, {
         params: { find_str: this.findText.trim(), page: this.selectedPage }
       })
       .then(async (res: any) => {
@@ -389,7 +389,7 @@ export default class Programs extends Vue {
       align-items: center;
       margin: 5px 0;
       &:hover {
-        background-color: rgba(128, 128, 128, 0.1);
+        background-color: rgba(128, 128, 128, 0.2);
       }
     }
   }

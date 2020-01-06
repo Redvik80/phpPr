@@ -21,8 +21,8 @@ import { Component, Vue } from "vue-property-decorator";
 export default class App extends Vue {
   navItems = [
     {
-      label: "Главная",
-      to: "/home"
+      label: "Баннеры",
+      to: "/banners"
     },
     {
       label: "Телепередачи",
@@ -31,6 +31,10 @@ export default class App extends Vue {
     {
       label: "Расписание",
       to: "/scheldule"
+    },
+    {
+      label: "Страницы",
+      to: "/pages"
     },
     {
       label: "Общие настройки",

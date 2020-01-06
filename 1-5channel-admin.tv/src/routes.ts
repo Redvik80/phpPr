@@ -1,18 +1,19 @@
 import VueRouter from 'vue-router';
-import Home from "./pages/Home.vue";
+import Banners from "./pages/Banners.vue";
 import Programs from "./pages/Programs.vue";
 import Scheldule from "./pages/Scheldule.vue";
+import Pages from "./pages/Pages.vue";
 import CommonSettings from "./pages/CommonSettings.vue";
 
 export default new VueRouter({
     routes: [
         {
             path: "",
-            redirect: "/home"
+            redirect: "/banners"
         },
         {
-            path: "/home",
-            component: Home
+            path: "/banners",
+            component: Banners
         },
         {
             path: "/programs",
@@ -21,6 +22,10 @@ export default new VueRouter({
         {
             path: "/scheldule",
             component: Scheldule
+        },
+        {
+            path: "/pages",
+            component: Pages
         },
         {
             path: "/common_settings",

@@ -58,7 +58,7 @@
       :closable="false"
       :modal="true"
     >
-      <div>Внимание! Телепередача будет добавлена в конец расписания.</div>
+      <div class="add-dialog-text">Внимание! Телепередача будет добавлена в конец расписания.</div>
       <ProgramsFindInput v-model="tempSchelduleItem.program" />
       <template #footer>
         <Button icon="pi pi-save" label="Сохранить" @click="onConfirmAddBtnClick()" />
@@ -137,7 +137,7 @@ export default class Scheldule extends Vue {
 
   getScheldule() {
     this.$http
-      .get(httpS.resources.scheldule.getAll, {
+      .get(httpS.resources.scheldule.get, {
         params: {
           date:
             moment(this.selectedDate)
@@ -298,21 +298,26 @@ export default class Scheldule extends Vue {
   .scheldule-list-header {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    background-color: rgba(128, 128, 128, 0.1);
+    border: solid rgba(128, 128, 128, 0.3) 1px;
+    padding: 3px;
   }
   .scheldule-list-container {
-    height: calc(100vh - 50px);
+    border: solid rgba(128, 128, 128, 0.3) 1px;
+    border-top: none;
+    padding: 3px;
+    height: calc(100vh - 60px);
     overflow-y: auto;
     .scheldule-list-item {
       display: flex;
       align-items: center;
       margin: 5px 0;
       &:hover {
-        background-color: rgba(128, 128, 128, 0.1);
+        background-color: rgba(128, 128, 128, 0.2);
       }
 
       &.invalid {
-        background-color: rgba(128, 128, 128, 0.5);
+        background-color: rgba(128, 128, 128, 0.75);
         .time-cell {
           text-decoration: line-through;
         }
@@ -332,6 +337,10 @@ export default class Scheldule extends Vue {
     button {
       margin: 0 3px;
     }
+  }
+
+  .add-dialog-text {
+    margin-bottom: 10px;
   }
 }
 </style>

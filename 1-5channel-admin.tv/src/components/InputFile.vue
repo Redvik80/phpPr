@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-root" ref="compRoot">
+  <div class="input-file-comp-root" ref="compRoot">
     <label>
       <span>Выбрать файл</span>
       <input type="file" @change="onSelectFile($event)" />
@@ -20,7 +20,7 @@ export default class InputFile extends Vue {
     const file = event.target.files[0];
 
     if (file.type && !file.type.startsWith(this.fileType + "/")) {
-      this.$toast.add({
+      return this.$toast.add({
         severity: "error",
         summary: "Ошибка",
         detail: "Недопустимый тип файла",
@@ -43,7 +43,7 @@ export default class InputFile extends Vue {
 </script>
 
 <style scoped lang="scss">
-.comp-root {
+.input-file-comp-root {
   > label {
     display: block;
     background-color: #007ad9;

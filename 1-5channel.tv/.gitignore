@@ -1,1 +1,4 @@
 node_modules
+logs.txt
+files/images/*.*
+!files/images/noImage.png

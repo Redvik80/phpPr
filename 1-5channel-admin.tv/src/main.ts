@@ -15,6 +15,9 @@ import ToastService from 'primevue/toastservice';
 import Paginator from 'primevue/paginator';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import Editor from 'primevue/editor';
+import Panel from 'primevue/panel';
+import Checkbox from 'primevue/checkbox';
 
 import ProgramsFindInput from './components/ProgramsFindInput.vue';
 import InputFile from './components/InputFile.vue';
@@ -42,6 +45,9 @@ Vue.use(ToastService);
 Vue.component('Paginator', Paginator);
 Vue.component('Calendar', Calendar);
 Vue.component('Dropdown', Dropdown);
+Vue.component('Editor', Editor);
+Vue.component('Panel', Panel);
+Vue.component('Checkbox', Checkbox);
 
 Vue.component('ProgramsFindInput', ProgramsFindInput);
 Vue.component('InputFile', InputFile);

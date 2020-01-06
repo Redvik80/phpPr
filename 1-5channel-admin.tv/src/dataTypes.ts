@@ -32,3 +32,34 @@ export class CutedProgram {
     name: string;
     duration: number;
 }
+
+export interface Banner {
+    id: number;
+    title: string;
+    description: string;
+    file_name: string;
+    newFile?: NewFile;
+}
+
+export interface CutedBanner {
+    id: number;
+    title: string;
+    checked?: boolean;
+}
+
+export interface Page {
+    id: number;
+    navigation_name: string;
+    title: string;
+    description: string;
+    banners_id: number[];
+    banners?: CutedBanner[];
+}
+
+export interface CommonSettingsData {
+    head_title: string;
+    favicon_file_name: string;
+    logo_file_name: string;
+    newFavicon?: NewFile;
+    newLogo?: NewFile;
+}

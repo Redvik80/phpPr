@@ -2,6 +2,7 @@
   <div class="comp-root" ref="compRoot">
     <InputText
       type="text"
+      placeholder="Название телепередачи"
       v-model="inputValue"
       @input="onInput()"
       @mousedown="onInputMousedown()"
@@ -44,7 +45,7 @@ export default class ProgramsFindInput extends Vue {
 
   findPrograms() {
     this.$http
-      .get(httpS.resources.program.getAll, {
+      .get(httpS.resources.program.get, {
         params: { cuted: "true", find_str: this.inputValue }
       })
       .then(async (res: any) => {
@@ -55,6 +56,7 @@ export default class ProgramsFindInput extends Vue {
   onInputMousedown() {
     this.showProgramsFlag = true;
     document.addEventListener("mousedown", this.onDocMousedown);
+    this.onInput();
   }
 
   onDocMousedown = () => {
@@ -89,6 +91,9 @@ export default class ProgramsFindInput extends Vue {
 .comp-root {
   display: flex;
   flex-direction: column;
+  input {
+    background-color: transparent;
+  }
   .no-height-container {
     height: 0;
     .programs-container {
@@ -102,7 +107,7 @@ export default class ProgramsFindInput extends Vue {
       .program {
         padding-left: 5px;
         &:hover {
-          background-color: rgba(128, 128, 128, 0.1);
+          background-color: rgba(128, 128, 128, 0.2);
         }
       }
     }
