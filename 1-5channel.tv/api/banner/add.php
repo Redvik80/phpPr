@@ -2,6 +2,7 @@
     include_once("../common.php");
     include_once("../../utils/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        checkToken();
         $data = json_decode(file_get_contents('php://input'), true);
         $data['file_name'] = "";
         if (isset($data["newFile"])) {

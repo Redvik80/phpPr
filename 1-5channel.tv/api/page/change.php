@@ -1,6 +1,7 @@
 <?
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        checkToken();
         $pages = json_decode(file_get_contents('php://input'), true);
         foreach($pages as $page) {
             pg_query_params($db, 'UPDATE page SET navigation_name=$1, title=$2, description=$3 WHERE id=$4',

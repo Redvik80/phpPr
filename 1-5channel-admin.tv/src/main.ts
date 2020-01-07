@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import router from "./routes"
+import mainRouter from "./main.router";
 import VueResource from 'vue-resource';
 
 import Menu from 'primevue/menu';
@@ -18,6 +18,7 @@ import Dropdown from 'primevue/dropdown';
 import Editor from 'primevue/editor';
 import Panel from 'primevue/panel';
 import Checkbox from 'primevue/checkbox';
+import ProgressSpinner from 'primevue/progressspinner';
 
 import ProgramsFindInput from './components/ProgramsFindInput.vue';
 import InputFile from './components/InputFile.vue';
@@ -48,11 +49,12 @@ Vue.component('Dropdown', Dropdown);
 Vue.component('Editor', Editor);
 Vue.component('Panel', Panel);
 Vue.component('Checkbox', Checkbox);
+Vue.component('ProgressSpinner', ProgressSpinner);
 
 Vue.component('ProgramsFindInput', ProgramsFindInput);
 Vue.component('InputFile', InputFile);
 
 new Vue({
     render: h => h(App),
-    router
+    router: mainRouter
 }).$mount('#app')

@@ -2,6 +2,7 @@
     include_once("../common.php");
     include_once("../../utils/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        checkToken();
         $data = json_decode(file_get_contents('php://input'), true);
         $data['file_name'] = pg_fetch_result(pg_query_params($db, "SELECT file_name FROM program WHERE id=$1", [$data['id']]), 0, 0);
         if (isset($data["newFile"])) {

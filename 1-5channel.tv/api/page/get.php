@@ -1,6 +1,7 @@
 <?
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        checkToken();
         $resp = pg_fetch_all(pg_query($db,
             "SELECT page.id, navigation_name, title, description, ARRAY_TO_JSON(ARRAY_AGG(banner_id)) as banners_id " .
             "FROM page LEFT JOIN banner_page_relation ON banner_page_relation.page_id = page.id " .

@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-root">
+  <div class="input-duration-comp-root">
     <div class="spinner-container">
       <Spinner v-model="hours" @input="onInput()" :min="0" :max="99" />ч.
     </div>
@@ -38,7 +38,7 @@ export default class InputDuration extends Vue {
 </script>
 
 <style scoped lang="scss">
-.comp-root {
+.input-duration-comp-root {
   display: flex;
   .spinner-container {
     width: 125px;
@@ -51,9 +51,11 @@ export default class InputDuration extends Vue {
 </style>
 
 <style lang="scss">
-.p-spinner {
-  input {
-    width: 60px;
+.input-duration-comp-root {
+  .p-spinner {
+    input {
+      width: 60px;
+    }
   }
 }
 </style>

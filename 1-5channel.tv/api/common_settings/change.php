@@ -2,6 +2,7 @@
     include_once("../common.php");
     include_once("../../utils/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        checkToken();
         $newData = json_decode(file_get_contents('php://input'), true);
         $oldData = pg_fetch_all(pg_query($db,"SELECT * FROM common_settings"))[0];
         $newData['favicon_file_name'] = $oldData['favicon_file_name'];

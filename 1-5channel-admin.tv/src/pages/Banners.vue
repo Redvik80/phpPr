@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-root">
+  <div class="banners-comp-root">
     <div class="p-inputgroup find-container">
       <InputText
         placeholder="Введите название баннера или его часть"
@@ -134,7 +134,7 @@ export default class Banners extends Vue {
 
   getBanners() {
     this.$http
-      .get(httpS.resources.banner.get, {
+      .get(httpS.api.banner.get, {
         params: { find_str: this.findText.trim(), page: this.selectedPage }
       })
       .then(async (res: any) => {
@@ -167,7 +167,7 @@ export default class Banners extends Vue {
   onConfirmDeleteBtnClick() {
     const id = this.selectedBanner.id;
     this.$http
-      .delete(httpS.resources.banner.delete, {
+      .delete(httpS.api.banner.delete, {
         params: { id }
       })
       .then(async () => {
@@ -194,7 +194,7 @@ export default class Banners extends Vue {
   onSaveBtnClick() {
     if (this.selectedBanner.id) {
       this.$http
-        .put(httpS.resources.banner.change, this.selectedBanner)
+        .put(httpS.api.banner.change, this.selectedBanner)
         .then(async (res: any) => {
           const newBanner = await res.body;
           this.banners = this.banners.map(item =>
@@ -204,7 +204,7 @@ export default class Banners extends Vue {
         });
     } else {
       this.$http
-        .post(httpS.resources.banner.add, this.selectedBanner)
+        .post(httpS.api.banner.add, this.selectedBanner)
         .then(async () => {
           this.showChangeDialogFlag = false;
           this.getBanners();
@@ -240,7 +240,7 @@ export default class Banners extends Vue {
 
 
 <style scoped lang="scss">
-.comp-root {
+.banners-comp-root {
   .find-container {
     margin-bottom: 5px;
     input {
@@ -295,7 +295,9 @@ export default class Banners extends Vue {
 </style>
 
 <style lang="scss">
-.p-editor-container .p-editor-content {
-  height: 150px;
+.banners-comp-root {
+  .p-editor-container .p-editor-content {
+    height: 150px;
+  }
 }
 </style>

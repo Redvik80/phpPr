@@ -59,9 +59,8 @@ CREATE TABLE common_settings(
 );
 
 CREATE TABLE "user"(
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY,
     login VARCHAR(50),
-    passhash CHAR(32),
-    access_token CHAR(13),
-    csrf_token CHAR(13)
+    passhash VARCHAR(255),
+    token VARCHAR(13)
 );

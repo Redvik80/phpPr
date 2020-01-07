@@ -189,7 +189,7 @@ export default class Programs extends Vue {
 
   getPrograms() {
     this.$http
-      .get(httpS.resources.program.get, {
+      .get(httpS.api.program.get, {
         params: { find_str: this.findText.trim(), page: this.selectedPage }
       })
       .then(async (res: any) => {
@@ -283,7 +283,7 @@ export default class Programs extends Vue {
   onConfirmDeleteBtnClick() {
     const id = this.selectedProgram.id;
     this.$http
-      .delete(httpS.resources.program.delete, {
+      .delete(httpS.api.program.delete, {
         params: { id }
       })
       .then(async () => {
@@ -310,7 +310,7 @@ export default class Programs extends Vue {
   onSaveBtnClick() {
     if (this.selectedProgram.id) {
       this.$http
-        .put(httpS.resources.program.change, this.selectedProgram)
+        .put(httpS.api.program.change, this.selectedProgram)
         .then(async (res: any) => {
           const newProgram = await res.body;
           this.programs = this.programs.map(item =>
@@ -320,7 +320,7 @@ export default class Programs extends Vue {
         });
     } else {
       this.$http
-        .post(httpS.resources.program.add, this.selectedProgram)
+        .post(httpS.api.program.add, this.selectedProgram)
         .then(async () => {
           this.showChangeDialogFlag = false;
           this.getPrograms();

@@ -1,12 +1,12 @@
 <template>
   <div class="app-root">
     <Toast />
-
-    <div class="menu-container">
+    <ProgressSpinner v-if="!authS.isAuth && mainRouter.currentRoute.path !== '/auth'" />
+    <div class="menu-container" v-if="authS.isAuth">
       <Menu :model="navItems" />
-      <Button icon="pi pi-sign-out" class="logout-btn" />
+      <Button icon="pi pi-sign-out" class="logout-btn" @click="logout()" />
     </div>
-    <div class="page-container">
+    <div class="page-container" v-if="authS.isAuth || mainRouter.currentRoute.path === '/auth'">
       <router-view></router-view>
     </div>
   </div>
@@ -14,11 +14,17 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import authS from "./services/auth.service";
+import httpS from "./services/http.service";
+import { HttpResponse } from "vue-resource/types/vue_resource";
+import mainRouter from "./main.router";
 
 @Component({
   components: {}
 })
 export default class App extends Vue {
+  authS = authS;
+  mainRouter = mainRouter;
   navItems = [
     {
       label: "Баннеры",
@@ -41,10 +47,18 @@ export default class App extends Vue {
       to: "/common_settings"
     }
   ];
+
+  created() {
+    if (mainRouter.currentRoute.path !== "/auth") authS.checkToken(this);
+  }
+
+  logout() {
+    authS.logout(this);
+  }
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 body {
   margin: 10px;
   .app-root {
@@ -77,18 +91,47 @@ body {
       margin-left: 10px;
       height: calc(100vh - 20px);
     }
-  }
 
-  .form-item-container {
-    > .label {
-      display: block;
-      margin-bottom: 3px;
+    .p-progress-spinner {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+      top: calc(50vh - 100px);
+      left: calc(50vw - 100px);
     }
-    > input {
-      display: block;
-      width: 100%;
+  }
+}
+</style>
+
+<style lang="scss">
+.form-item-container {
+  > .label {
+    display: block;
+    margin-bottom: 3px;
+  }
+  > input {
+    display: block;
+    width: 100%;
+  }
+  margin-bottom: 10px;
+}
+
+.menu-container {
+  .p-menu {
+    .p-menitem {
+      .p-menuitem-link {
+        &:focus {
+          box-shadow: none;
+        }
+        &.router-link-active,
+        &.router-link-active:hover {
+          background-color: #007ad9;
+          .p-menuitem-text {
+            color: white;
+          }
+        }
+      }
     }
-    margin-bottom: 10px;
   }
 }
 </style>

@@ -42,7 +42,7 @@ export default class CommonSettings extends Vue {
   logoImgSrc = httpS.getImgSrc("");
 
   created() {
-    this.$http.get(httpS.resources.commonSettings.get).then(async data => {
+    this.$http.get(httpS.api.commonSettings.get).then(async data => {
       this.data = await data.json();
       this.faviconImgSrc = httpS.getImgSrc(this.data.favicon_file_name);
       this.logoImgSrc = httpS.getImgSrc(this.data.logo_file_name);
@@ -70,7 +70,7 @@ export default class CommonSettings extends Vue {
 
   onSaveBtnClick() {
     this.$http
-      .put(httpS.resources.commonSettings.change, this.data)
+      .put(httpS.api.commonSettings.change, this.data)
       .then(async res => {
         this.data = await res.json();
         this.faviconImgSrc = httpS.getImgSrc(this.data.favicon_file_name);

@@ -1,6 +1,7 @@
 <?
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        checkToken();
         $resp = pg_fetch_all(pg_query_params($db,
             "SELECT * " .
             "FROM scheldule INNER JOIN program ON scheldule.program_id=program.id " .

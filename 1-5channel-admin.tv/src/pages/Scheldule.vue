@@ -137,7 +137,7 @@ export default class Scheldule extends Vue {
 
   getScheldule() {
     this.$http
-      .get(httpS.resources.scheldule.get, {
+      .get(httpS.api.scheldule.get, {
         params: {
           date:
             moment(this.selectedDate)
@@ -231,7 +231,7 @@ export default class Scheldule extends Vue {
   onSaveBtnClick() {
     this.$http
       .put(
-        httpS.resources.scheldule.change,
+        httpS.api.scheldule.change,
         this.schelduleItems.map(item => {
           const newItem = { ...item };
           newItem.program_id = newItem.program.id;

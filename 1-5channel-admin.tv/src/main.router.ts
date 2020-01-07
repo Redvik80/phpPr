@@ -4,6 +4,7 @@ import Programs from "./pages/Programs.vue";
 import Scheldule from "./pages/Scheldule.vue";
 import Pages from "./pages/Pages.vue";
 import CommonSettings from "./pages/CommonSettings.vue";
+import Auth from "./pages/Auth.vue";
 
 export default new VueRouter({
     routes: [
@@ -30,6 +31,10 @@ export default new VueRouter({
         {
             path: "/common_settings",
             component: CommonSettings
+        },
+        {
+            path: "/auth",
+            component: Auth
         }
     ],
     mode: "history"

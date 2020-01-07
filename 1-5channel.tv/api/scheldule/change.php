@@ -1,6 +1,7 @@
 <?
     include_once("../common.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        checkToken();
         $newData = json_decode(file_get_contents('php://input'), true);
         for ($i = 0;  $i < count($newData); $i++) {
             if (!$newData[$i]["id"]) {

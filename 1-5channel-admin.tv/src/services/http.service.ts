@@ -1,6 +1,6 @@
 class HttpService {
     backendAddress = "http://1-5channel.tv"
-    resources = {
+    api = {
         banner: {
             get: "/api/banner/get.php",
             add: "/api/banner/add.php",
@@ -24,6 +24,11 @@ class HttpService {
         commonSettings: {
             get: "/api/common_settings/get.php",
             change: "/api/common_settings/change.php"
+        },
+        auth: {
+            login: "/api/auth/login.php",
+            logout: "/api/auth/logout.php",
+            checkToken: "/api/auth/check_token.php"
         }
     }
     getImgSrc(fileName: string) {

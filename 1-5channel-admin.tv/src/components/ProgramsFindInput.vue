@@ -45,7 +45,7 @@ export default class ProgramsFindInput extends Vue {
 
   findPrograms() {
     this.$http
-      .get(httpS.resources.program.get, {
+      .get(httpS.api.program.get, {
         params: { cuted: "true", find_str: this.inputValue }
       })
       .then(async (res: any) => {

@@ -3,6 +3,7 @@
     function get() {
         global $db;
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') return "[]";
+        checkToken();
 
         $resp = [
             "totalQuantity" => 0,

@@ -81,8 +81,8 @@ export default class Pages extends Vue {
   pagesBackup = "[]";
 
   created() {
-    const pr1 = this.$http.get(httpS.resources.page.get);
-    const pr2 = this.$http.get(httpS.resources.banner.get, {
+    const pr1 = this.$http.get(httpS.api.page.get);
+    const pr2 = this.$http.get(httpS.api.banner.get, {
       params: { cuted: "true" }
     });
     Promise.all([pr1, pr2]).then(async data => {
@@ -113,7 +113,7 @@ export default class Pages extends Vue {
   onSaveBtnClick() {
     this.$http
       .put(
-        httpS.resources.page.change,
+        httpS.api.page.change,
         this.pages.map(item => {
           const newPage = { ...item };
           delete newPage.banners;
