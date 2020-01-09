@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS banner;
 DROP TABLE IF EXISTS page;
 
 DROP TABLE IF EXISTS common_settings;
-DROP TABLE IF EXISTS "user";
+-- DROP TABLE IF EXISTS "user";
 
 CREATE TABLE program(
     id SERIAL PRIMARY KEY,
@@ -47,6 +47,7 @@ CREATE TABLE banner_page_relation(
     id SERIAL PRIMARY KEY,
     banner_id INT,
     page_id INT,
+    "order" INT,
 
     FOREIGN KEY (banner_id) REFERENCES banner(id) ON DELETE CASCADE,
     FOREIGN KEY (page_id) REFERENCES page(id) ON DELETE CASCADE
@@ -58,9 +59,7 @@ CREATE TABLE common_settings(
     logo_file_name VARCHAR(100)
 );
 
-CREATE TABLE "user"(
-    id INT PRIMARY KEY,
-    login VARCHAR(50),
-    passhash VARCHAR(255),
-    token VARCHAR(13)
-);
+-- CREATE TABLE "user"(-- id INT PRIMARY KEY,
+    -- login VARCHAR(50),
+    -- passhash VARCHAR(255),
+    -- token VARCHAR(13) --);

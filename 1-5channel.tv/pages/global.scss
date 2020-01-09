@@ -1,7 +1,8 @@
-@import "../components/navigation/navigation.scss";
+@import "../components/header/header.scss";
 
 body {
     margin: 0;
+    font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
 }
 
 * {
@@ -16,5 +17,27 @@ input {
     &:focus {
         border-color: black;
         outline: none;
+    }
+}
+
+.quill-editor-content {
+    .ql-align-center {
+        text-align: center;
+    }
+
+    .ql-align-right {
+        text-align: right;
+    }
+
+    .ql-align-justify {
+        text-align: justify;
+    }
+
+    .ql-size-large {
+        font-size: larger;
+    }
+
+    .ql-size-small {
+        font-size: smaller;
     }
 }

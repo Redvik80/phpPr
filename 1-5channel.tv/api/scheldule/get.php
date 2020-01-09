@@ -1,14 +1,15 @@
 <?
-    include_once("../common.php");
+    include_once("../global.php");
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         checkToken();
         $resp = pg_fetch_all(pg_query_params($db,
-            "SELECT * " .
+            "SELECT scheldule.id as id, \"date\", \"order\", program_id, name, duration " .
             "FROM scheldule INNER JOIN program ON scheldule.program_id=program.id " .
             "WHERE \"date\"=$1 ORDER BY \"order\"",
             [$_GET['date'] * 1]
         ));
         $newResp = [];
+        fileLog($resp);
         foreach($resp as $item) {
             $item["id"] = $item["id"] * 1;
             $item["date"] = $item["date"] * 1;

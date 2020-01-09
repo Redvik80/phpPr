@@ -1,0 +1,47 @@
+header {
+    display: flex;
+    height: 60px;
+
+    .logo {
+        width: 180px;
+        height: 60px;
+        object-fit: contain;
+    }
+
+    .page-navigation {
+        display: flex;
+        flex-grow: 1;
+
+        >a {
+            flex-grow: 1;
+            padding: 20px;
+            text-align: center;
+            background-color: rgb(75, 75, 75);
+            text-decoration: none;
+            color: rgb(200, 200, 200);
+
+            &:hover {
+                background-color: rgb(60, 60, 60);
+                color: white;
+            }
+
+            &.selected {
+                background-color: black;
+                color: white;
+            }
+        }
+    }
+
+    @media (max-width: 769px) {
+        flex-direction: column;
+        height: auto;
+
+        .logo {
+            width: 100%;
+        }
+
+        .page-navigation {
+            flex-direction: column;
+        }
+    }
+}

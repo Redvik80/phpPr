@@ -1,5 +1,5 @@
 <?
-    include_once("../common.php");
+    include_once("../global.php");
     function get() {
         global $db;
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') return "[]";

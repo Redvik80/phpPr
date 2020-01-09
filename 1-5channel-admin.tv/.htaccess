@@ -1,0 +1,18 @@
+# systemctl restart apache2
+
+DirectoryIndex dist/index.html
+
+RewriteEngine On
+RewriteRule ^css/(.*)$ dist/css/$1 [L]
+RewriteRule ^js/(.*)$ dist/js/$1 [L]
+RewriteRule ^img/(.*)$ dist/img/$1 [L]
+RewriteRule ^fonts/(.*)$ dist/fonts/$1 [L]
+RewriteRule ^favicon.ico$ dist/favicon.ico$1 [L]
+
+RewriteRule ^banners$ dist/index.html [L]
+RewriteRule ^programs$ dist/index.html [L]
+RewriteRule ^scheldule$ dist/index.html [L]
+RewriteRule ^pages$ dist/index.html [L]
+RewriteRule ^common_settings$ dist/index.html [L]
+
+# Options -Indexes

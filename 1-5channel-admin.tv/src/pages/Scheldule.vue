@@ -29,7 +29,7 @@
         <div class="buttons-cell">
           <Button icon="pi pi-arrow-down" @click="onOrderPlusBtnClick(item)" />
           <Button icon="pi pi-arrow-up" @click="onOrderMinusBtnClick(item)" />
-          <Button icon="pi pi-trash" @click="onDelBtnClick(index)" />
+          <Button icon="pi pi-trash" @click="onDelBtnClick(index, item)" />
         </div>
       </div>
     </div>
@@ -152,8 +152,11 @@ export default class Scheldule extends Vue {
       });
   }
 
-  onDelBtnClick(arrIdx: number) {
+  onDelBtnClick(arrIdx: number, delItem: SchelduleItem) {
     this.schelduleItems.splice(arrIdx, 1);
+    for (let item of this.schelduleItems) {
+      if (item.order > delItem.order) item.order--;
+    }
     this.updateTime();
   }
 
@@ -258,37 +261,25 @@ export default class Scheldule extends Vue {
   updateTime() {
     const time = {
       hours: 0,
-      minutes: 0
+      minutes: 0,
+      seconds: 0
     };
     for (let schelduleItem of this.schelduleItems) {
       schelduleItem.time = {
-        hours: time.hours,
-        minutes: time.minutes,
-        str: `${(time.hours < 10 ? "0" : "") + time.hours}:${(time.minutes < 10
-          ? "0"
-          : "") + time.minutes}`,
-        isValid: this.checkTime(
-          time.hours,
-          time.minutes,
-          schelduleItem.program.duration
-        )
+        str: (time.hours < 10 ? "0" : "") + time.hours + ":" +
+          (time.minutes < 10 ? "0" : "") + time.minutes + ":" +
+          (time.seconds < 10 ? "0" : "") + time.seconds,
+        isValid: false
       };
-      time.minutes += Math.round(schelduleItem.program.duration / 60);
-      while (time.minutes > 59) {
-        time.minutes -= 60;
-        time.hours++;
+      time.seconds += schelduleItem.program.duration;
+      time.minutes += Math.floor(time.seconds / 60);
+      time.seconds = time.seconds % 60;
+      time.hours += Math.floor(time.minutes / 60);
+      time.minutes = time.minutes % 60;
+      if ((time.hours === 24 && time.minutes === 0 && time.seconds === 0) || time.hours < 24) {
+        schelduleItem.time.isValid = true;
       }
     }
-  }
-
-  checkTime(hours: number, minutes: number, duration: number) {
-    minutes += Math.round(duration / 60);
-    while (minutes > 59) {
-      minutes -= 60;
-      hours++;
-    }
-    if ((hours === 24 && minutes === 0) || hours < 24) return true;
-    return false;
   }
 }
 </script>

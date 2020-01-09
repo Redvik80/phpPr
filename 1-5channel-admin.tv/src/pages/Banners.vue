@@ -63,6 +63,7 @@
                 <button class="ql-strike"></button>
               </span>
               <span class="ql-formats">
+                <button class="ql-link"></button>
                 <select class="ql-color"></select>
                 <select class="ql-align"></select>
                 <button class="ql-clean"></button>

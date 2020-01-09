@@ -1,5 +1,5 @@
 <?
-    include_once("../common.php");
+    include_once("../global.php");
     include_once("../../utils/file.php");
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         checkToken();

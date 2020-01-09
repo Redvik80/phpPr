@@ -19,10 +19,12 @@
       <InputText type="text" v-model="data.head_title" maxlength="200" />
     </div>
     <div class="input-file-container">
+      <span class="label">Favicon (иконка на вкладке браузера)</span>
       <img alt="favicon" :src="faviconImgSrc" />
       <InputFile fileType="image" @fileChange="onFaviconChange($event)" />
     </div>
     <div class="input-file-container">
+      <span class="label">Логотип</span>
       <img alt="logo" :src="logoImgSrc" />
       <InputFile fileType="image" @fileChange="onLogoChange($event)" />
     </div>

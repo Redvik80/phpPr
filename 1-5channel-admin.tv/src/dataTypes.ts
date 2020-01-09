@@ -20,8 +20,6 @@ export class SchelduleItem {
     program_id?: number;
     program?: CutedProgram;
     time?: {
-        hours: number,
-        minutes: number,
         str: string,
         isValid: boolean
     };
@@ -43,8 +41,9 @@ export interface Banner {
 
 export interface CutedBanner {
     id: number;
-    title: string;
+    title?: string;
     checked?: boolean;
+    order: number;
 }
 
 export interface Page {
@@ -52,7 +51,6 @@ export interface Page {
     navigation_name: string;
     title: string;
     description: string;
-    banners_id: number[];
     banners?: CutedBanner[];
 }
 

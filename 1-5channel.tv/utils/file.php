@@ -1,6 +1,9 @@
 <?
-    $imagesDirRoot = "../../files/images/";
-    $videosDirRoot = "../../files/videos/";
+    $imagesDirRoot = __DIR__ . "/../files/images/";
+    $videosDirRoot = __DIR__ . "/../files/videos/";
+
+    $imagesSrcRoot = "/files/images/";
+    $videosSrcRoot = "/files/videos/";
 
     function saveFile($dataUrl, $extension, $dir) {
         if (!$dataUrl) return "";
@@ -18,5 +21,11 @@
         if ($fileName && file_exists($dir . $fileName)) {
             unlink($dir . $fileName);
         }
+    }
+
+    function getImgSrc($fileName) {
+        global $imagesDirRoot, $imagesSrcRoot;
+        if ($fileName && file_exists($imagesDirRoot . $fileName)) return $imagesSrcRoot . $fileName;
+        return $imagesSrcRoot . "noImage.png";
     }
 ?>

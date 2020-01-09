@@ -1,5 +1,5 @@
 <?
-    include_once("../common.php");
+    include_once("../global.php");
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $data = json_decode(file_get_contents('php://input'), true);

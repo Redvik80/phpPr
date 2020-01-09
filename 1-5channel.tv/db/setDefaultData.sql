@@ -35,11 +35,11 @@ CREATE FUNCTION set_default_data() RETURNS void AS $BODY$
             ) RETURNING id INTO current_banner_id;
             IF i < 110 THEN
                 INSERT INTO banner_page_relation VALUES(
-                    DEFAULT, current_banner_id, 1
+                    DEFAULT, current_banner_id, 1, i - 100
                 );
                 IF i < 105 THEN
                     INSERT INTO banner_page_relation VALUES(
-                        DEFAULT, current_banner_id, 3
+                        DEFAULT, current_banner_id, 3, i - 100
                     );
                 END IF;
             END IF;

@@ -8,7 +8,13 @@
 </head>
 
 <body>
-    <?include "../../components/navigation/navigation.php"?>
+    <?
+        include_once("../global.php");
+        include "../../components/header/header.php";
+    ?>
+    <div class="content">
+
+    </div>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-root">
+  <div class="pages-comp-root">
     <div class="buttons-container">
       <Button
         icon="pi pi-save"
@@ -45,6 +45,7 @@
               <button class="ql-strike"></button>
             </span>
             <span class="ql-formats">
+              <button class="ql-link"></button>
               <select class="ql-color"></select>
               <select class="ql-align"></select>
               <button class="ql-clean"></button>
@@ -53,7 +54,7 @@
         </Editor>
       </div>
       <div class="banners-select-header">
-        <div>Баннеры (выбранно {{page.banners_id.length}} из {{page.banners.length}})</div>
+        <div>Баннеры (выбранно {{getQuantitySelectedBanners(page.banners)}} из {{page.banners.length}})</div>
         <div>
           <div class="id-cell">id</div>
           <div class="title-cell">Заголовок</div>
@@ -63,6 +64,16 @@
         <div class="banners-select-item" v-for="banner in page.banners" :key="banner.id">
           <div class="id-cell">{{banner.id}}</div>
           <div class="title-cell">{{banner.title}}</div>
+          <Button
+            icon="pi pi-arrow-down"
+            v-if="banner.order !== Infinity"
+            @click="onOrderPlusBtnClick(page, banner)"
+          />
+          <Button
+            icon="pi pi-arrow-up"
+            v-if="banner.order !== Infinity"
+            @click="onOrderMinusBtnClick(page, banner)"
+          />
           <Checkbox :binary="true" v-model="banner.checked" @change="onChangeBanner(page, banner)" />
         </div>
       </div>
@@ -86,20 +97,61 @@ export default class Pages extends Vue {
       params: { cuted: "true" }
     });
     Promise.all([pr1, pr2]).then(async data => {
-      let banners = (await data[1].json())["data"];
+      let banners = (await data[1].json())["data"] as CutedBanner[];
       this.pages = await data[0].json();
+
       setTimeout(() => {
         this.updatePagesBackup();
+        this.panelsToAccordion();
       });
+
       for (let page of this.pages) {
+        const oldBanners = page.banners;
         page.banners = [];
         for (let banner of banners) {
           const newBanner = { ...banner };
           page.banners.push(newBanner);
-          newBanner.checked = page.banners_id.indexOf(banner.id) !== -1;
+          const oldBanner = oldBanners.find(item => item.id === newBanner.id);
+          if (oldBanner) {
+            newBanner.checked = true;
+            newBanner.order = oldBanner.order;
+          } else {
+            newBanner.checked = false;
+            newBanner.order = Infinity;
+          }
         }
+        this.sortBanners(page.banners);
       }
     });
+  }
+
+  panelsToAccordion() {
+    const panels = document.getElementsByClassName("p-panel-titlebar");
+    for (let panel of panels) {
+      const btn = panel.getElementsByClassName(
+        "p-panel-titlebar-toggler"
+      )[0] as HTMLElement;
+      panel.addEventListener("click", event => {
+        if (
+          event.target === btn ||
+          (event.target as HTMLElement).classList.contains("pi")
+        ) {
+          return;
+        }
+        btn.click();
+
+        if (btn.firstElementChild.classList.contains("pi-plus")) {
+          for (let panel of panels) {
+            const btn = panel.getElementsByClassName(
+              "p-panel-titlebar-toggler"
+            )[0] as HTMLElement;
+            if (btn.firstElementChild.classList.contains("pi-minus")) {
+              btn.click();
+            }
+          }
+        }
+      });
+    }
   }
 
   pagesIsChanged() {
@@ -114,9 +166,15 @@ export default class Pages extends Vue {
     this.$http
       .put(
         httpS.api.page.change,
-        this.pages.map(item => {
-          const newPage = { ...item };
-          delete newPage.banners;
+        this.pages.map(page => {
+          const newPage = JSON.parse(JSON.stringify(page)) as Page;
+          newPage.banners = newPage.banners
+            .filter(banner => banner.checked)
+            .map(banner => {
+              delete banner.title;
+              delete banner.checked;
+              return banner;
+            });
           return newPage;
         })
       )
@@ -129,18 +187,53 @@ export default class Pages extends Vue {
     this.pages = JSON.parse(this.pagesBackup);
   }
 
+  sortBanners(banners: CutedBanner[]) {
+    banners.sort((item1, item2) =>
+      item1.order === item2.order ? 0 : item1.order - item2.order
+    );
+  }
+
+  getQuantitySelectedBanners(banners: CutedBanner[]) {
+    let quantity = 0;
+    for (let banner of banners) if (banner.checked) quantity++;
+    return quantity;
+  }
+
   onChangeBanner(page: Page, banner: CutedBanner) {
     if (banner.checked) {
-      page.banners_id.push(banner.id);
+      banner.order = this.getQuantitySelectedBanners(page.banners) - 1;
+      this.sortBanners(page.banners);
     } else {
-      page.banners_id = page.banners_id.filter(item => item !== banner.id);
+      for (let item of page.banners) {
+        if (item.order > banner.order) item.order--;
+      }
+      banner.order = Infinity;
+      this.sortBanners(page.banners);
+    }
+  }
+
+  onOrderPlusBtnClick(page: Page, bunner: CutedBanner) {
+    const bunner2 = page.banners.find(item => item.order === bunner.order + 1);
+    if (bunner2) {
+      bunner2.order--;
+      bunner.order++;
+      this.sortBanners(page.banners);
+    }
+  }
+
+  onOrderMinusBtnClick(page: Page, bunner: CutedBanner) {
+    const bunner2 = page.banners.find(item => item.order === bunner.order - 1);
+    if (bunner2) {
+      bunner2.order++;
+      bunner.order--;
+      this.sortBanners(page.banners);
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.comp-root {
+.pages-comp-root {
   .buttons-container {
     display: flex;
     justify-content: flex-end;
@@ -177,6 +270,12 @@ export default class Pages extends Vue {
       .p-checkbox {
         margin: 0 3px;
       }
+      .p-button {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        margin: 0 3px;
+      }
     }
   }
 
@@ -187,6 +286,14 @@ export default class Pages extends Vue {
   .title-cell {
     margin: 0 3px;
     flex-grow: 1;
+  }
+}
+</style>
+
+<style lang="scss">
+.pages-comp-root {
+  .p-editor-container .p-editor-content {
+    height: 150px;
   }
 }
 </style>
