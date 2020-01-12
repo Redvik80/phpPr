@@ -14,6 +14,7 @@
         } else {
             $resp["data"] = pg_fetch_all(pg_query($db, "SELECT * FROM program ORDER BY id"));
         }
+        if (!$resp["data"]) $resp["data"] = [];
         $newData = [];
         foreach($resp["data"] as $item) {
             $item["id"] = $item["id"] * 1;

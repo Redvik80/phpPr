@@ -1,7 +1,7 @@
 <template>
   <div class="comp-root">
     <div class="scheldule-list-header">
-      <div class="time-cell">Время</div>
+      <div class="time-cell">Время ({{utcOffset > 0 ? "" : "+"}}{{utcOffset / -60}}ч.)</div>
       <div class="name-cell">Телепередача</div>
       <div class="buttons-cell">
         <Calendar
@@ -24,7 +24,7 @@
       >
         <div class="time-cell">{{item.time.str}}</div>
         <div class="name-cell">
-          <ProgramsFindInput v-model="item.program" />
+          <ProgramsFindInput v-model="item.program" @input="updateTime()" />
         </div>
         <div class="buttons-cell">
           <Button icon="pi pi-arrow-down" @click="onOrderPlusBtnClick(item)" />
@@ -90,9 +90,11 @@ export default class Scheldule extends Vue {
   showAddDialogFlag = false;
   tempSchelduleItem: SchelduleItem;
 
+  utcOffset = moment().utcOffset();
+
   created() {
     const dateNow = new Date();
-    this.selectedDate = moment()
+    this.selectedDate = moment().utc()
       .startOf("date")
       .toDate();
     this.getScheldule();
@@ -110,9 +112,7 @@ export default class Scheldule extends Vue {
   updateTempSchelduleItem() {
     this.tempSchelduleItem = {
       id: null,
-      date: moment(this.selectedDate)
-        .add(moment().utcOffset(), "minutes")
-        .unix(),
+      date: moment(this.selectedDate).unix(),
       order: this.schelduleItems.length,
       program: null
     };
@@ -140,9 +140,7 @@ export default class Scheldule extends Vue {
       .get(httpS.api.scheldule.get, {
         params: {
           date:
-            moment(this.selectedDate)
-              .add(moment().utcOffset(), "minutes")
-              .unix() + ""
+            moment(this.selectedDate).unix() + ""
         }
       })
       .then(async (res: any) => {
@@ -245,9 +243,7 @@ export default class Scheldule extends Vue {
         {
           params: {
             date:
-              moment(this.selectedDate)
-                .add(moment().utcOffset(), "minutes")
-                .unix() + ""
+              moment(this.selectedDate).unix() + ""
           }
         }
       )

@@ -1,1 +1,117 @@
 @import "../global.scss";
+
+body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+
+    header {
+        width: 100%;
+    }
+
+    .content {
+        max-width: 1250px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .banners-aside {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .text-and-player-container {
+            width: 750px;
+            display: flex;
+            flex-direction: column;
+
+            .text-content {
+                padding: 5px;
+
+                .page-text-title {
+                    text-align: center;
+                }
+            }
+
+            .player-container {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                #player-header {
+                    margin-bottom: 5px;
+                }
+
+                #yt-player,
+                #html-player {
+                    display: none;
+                    width: 100%;
+                    height: 425px;
+                }
+
+                #no-signal-img {
+                    display: none;
+                    width: 70%;
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        .banners-footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            @media (min-width: 1000px) {
+                .banner-container {
+
+                    &:nth-of-type(1),
+                    &:nth-of-type(2),
+                    &:nth-of-type(3),
+                    &:nth-of-type(4),
+                    &:nth-of-type(5),
+                    &:nth-of-type(6) {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 1249px) {
+            .text-and-player-container {
+                width: 500px;
+
+                .player-container {
+
+                    #yt-player,
+                    #html-player {
+                        height: 285px;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 999px) {
+            .text-and-player-container {
+                width: 100%;
+
+                .player-container {
+
+                    #yt-player,
+                    #html-player {
+                        height: 56.25vw;
+                    }
+                }
+            }
+
+            .banners-aside {
+                display: none;
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 <header>
-    <img src="files/images/5e14dc34b8919.png" alt="logo" class="logo">
+    <img src="/files/images/5e14dc34b8919.png" alt="logo" class="logo">
     <nav class="page-navigation">
         <?
             $links = [

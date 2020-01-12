@@ -5,6 +5,7 @@ DirectoryIndex pages/home/home.php
 RewriteEngine on
 RewriteRule ^programTV$ pages/programTV/programTV.php [L]
 RewriteRule ^onlineTV$ pages/onlineTV/onlineTV.php [L]
+RewriteRule ^banner/ pages/banner/banner.php [L]
 
 # Header add Access-Control-Allow-Origin "http://1-5channel-admin.tv"
 Header add Access-Control-Allow-Origin "*"

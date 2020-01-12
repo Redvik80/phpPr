@@ -7,7 +7,7 @@
             "FROM page LEFT JOIN banner_page_relation ON banner_page_relation.page_id = page.id " .
             "GROUP BY page.id, navigation_name, title, description ORDER BY page.id"
         ));
-
+        if (!$resp) $resp = [];
         $newResp = [];
         foreach($resp as $item) {
             $item["id"] = $item["id"] * 1;

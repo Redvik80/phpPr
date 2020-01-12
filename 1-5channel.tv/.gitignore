@@ -1,4 +1,6 @@
 node_modules
 logs.txt
 files/images/*.*
+files/videos/*.*
 !files/images/noImage.png
+!files/images/noSignal.png

@@ -4,7 +4,7 @@
     <ProgressSpinner v-if="!authS.isAuth && mainRouter.currentRoute.path !== '/auth'" />
     <div class="menu-container" v-if="authS.isAuth">
       <Menu :model="navItems" />
-      <Button icon="pi pi-sign-out" class="logout-btn" @click="logout()" />
+      <Button icon="pi pi-sign-out" label="Выход" class="logout-btn" @click="logout()" />
     </div>
     <div class="page-container" v-if="authS.isAuth || mainRouter.currentRoute.path === '/auth'">
       <router-view></router-view>

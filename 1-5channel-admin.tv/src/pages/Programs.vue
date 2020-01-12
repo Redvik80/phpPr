@@ -20,7 +20,7 @@
         <div class="id-cell">{{program.id}}</div>
         <div class="name-cell">{{program.name}}</div>
         <div class="buttons-cell">
-          <Button icon="pi pi-pencil" @click="onChangeBtnClick(program)" />
+          <Button icon="pi pi-pencil" @click="onChangeBtnClick(program)" :disabled="!commonS.ytApiLoaded"/>
           <Button icon="pi pi-trash" @click="onDelBtnClick(program)" />
         </div>
       </div>
@@ -116,6 +116,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import httpS from "../services/http.service";
+import commonS from "../services/common.service";
 import { Program, NewFile } from "../dataTypes";
 import { delayDecorator } from "../utils/delayDecorator";
 
@@ -128,6 +129,8 @@ export default class Programs extends Vue {
   selectedPage = 1;
   showChangeDialogFlag = false;
   selectedProgram: Program;
+
+  commonS = commonS;
 
   fromYtFlags = [
     {

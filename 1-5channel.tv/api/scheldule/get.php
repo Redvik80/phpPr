@@ -8,8 +8,8 @@
             "WHERE \"date\"=$1 ORDER BY \"order\"",
             [$_GET['date'] * 1]
         ));
+        if (!$resp) $resp = [];
         $newResp = [];
-        fileLog($resp);
         foreach($resp as $item) {
             $item["id"] = $item["id"] * 1;
             $item["date"] = $item["date"] * 1;

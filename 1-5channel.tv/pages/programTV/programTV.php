@@ -42,10 +42,11 @@
             <div class="table">
                 <div class="table-header">
                     <?
-                        $date = isset($_GET['date']) ? $_GET['date'] * 1 : strtotime("today 00:00 UTC");;
+                        $date = isset($_GET['date']) ? $_GET['date'] * 1 : strtotime("today 00:00 UTC");
                     ?>
                     <div class="time-cell">Время</div>
                     <div class="name-cell">Телепередача</div>
+                    <?include "../../components/clock/clock.php";?>
                     <input type="date" value="<? echo date("Y-m-d", $date); ?>">
                 </div>
                 <div class="table-body">
@@ -56,6 +57,7 @@
                             "WHERE \"date\"=$1 ORDER BY \"order\"",
                             [$date]
                         ));
+                        if (!$pograms[0]) $pograms = [];
                         $time = [
                             "hours" => 0,
                             "minutes" => 0,
@@ -89,7 +91,7 @@
         </aside>
         <div class="banners-footer">
             <?
-                if (count($banners) > 4) foreach($banners as $banner) addBanner($banner);
+                if (count($banners) > 6) foreach($banners as $banner) addBanner($banner);
             ?>
         </div>
     </div>

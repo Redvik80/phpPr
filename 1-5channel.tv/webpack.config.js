@@ -6,6 +6,7 @@ module.exports = {
         "home": './pages/home/home.ts',
         "onlineTV": './pages/onlineTV/onlineTV.ts',
         "programTV": './pages/programTV/programTV.ts',
+        "banner": './pages/banner/banner.ts'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
