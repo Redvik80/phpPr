@@ -1,7 +1,10 @@
 <html>
 
 <head>
-    <title>1.5 канал</title>
+    <?
+        include_once("../global.php");
+        include_once("../../components/commonSettings/commonSettings.php");
+    ?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" />
     <link rel="stylesheet" href="/dist/programTV.css">
@@ -10,7 +13,6 @@
 
 <body>
     <?
-        include_once("../global.php");
         include "../../components/header/header.php";
         $pageId = 2;
         $pageText = pg_fetch_all(pg_query($db, "SELECT title, description FROM page WHERE id = ${pageId}"))[0];
@@ -47,7 +49,7 @@
                     <div class="time-cell">Время</div>
                     <div class="name-cell">Телепередача</div>
                     <?include "../../components/clock/clock.php";?>
-                    <input type="date" value="<? echo date("Y-m-d", $date); ?>">
+                    <input type="date" value="<? echo date("Y-m-d", $date); ?>" id="main-data-input">
                 </div>
                 <div class="table-body">
                     <?

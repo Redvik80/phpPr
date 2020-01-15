@@ -2,7 +2,7 @@
   <div class="input-file-comp-root" ref="compRoot">
     <label>
       <span>Выбрать файл</span>
-      <input type="file" @change="onSelectFile($event)" />
+      <input type="file" @change="onSelectFile($event)" name="file" />
     </label>
   </div>
 </template>
@@ -12,13 +12,12 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
 export default class InputFile extends Vue {
-  @Prop() fileType: "video" | "audio" | "image";
+  @Prop() fileType: "video" | "image";
 
   created() {}
 
   onSelectFile(event) {
     const file = event.target.files[0];
-
     if (file.type && !file.type.startsWith(this.fileType + "/")) {
       return this.$toast.add({
         severity: "error",
@@ -28,16 +27,24 @@ export default class InputFile extends Vue {
       });
     }
 
-    let reader = new FileReader();
-    reader.addEventListener("load", event2 => {
-      let dataUrl = (event2.target as any).result;
+    if (this.fileType === "image") {
+      let reader = new FileReader();
+      reader.addEventListener("load", event2 => {
+        let dataUrl = (event2.target as any).result;
+        this.$emit("fileChange", {
+          dataUrl: dataUrl,
+          extension: file.name.split(".").pop()
+        });
+      });
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    } else if (this.fileType === "video") {
       this.$emit("fileChange", {
-        dataUrl: dataUrl,
+        tempUrl: URL.createObjectURL(file),
         extension: file.name.split(".").pop()
       });
-    });
-    reader.readAsDataURL(file);
-    event.target.value = "";
+    }
+
   }
 }
 </script>

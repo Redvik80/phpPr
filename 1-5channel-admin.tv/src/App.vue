@@ -7,6 +7,7 @@
       <Button icon="pi pi-sign-out" label="Выход" class="logout-btn" @click="logout()" />
     </div>
     <div class="page-container" v-if="authS.isAuth || mainRouter.currentRoute.path === '/auth'">
+      <ProgressBar mode="indeterminate" id="main-progress-bar" he/>
       <router-view></router-view>
     </div>
   </div>
@@ -117,6 +118,7 @@ body {
 }
 
 .menu-container {
+  margin-top: 10px;
   .p-menu {
     .p-menitem {
       .p-menuitem-link {
@@ -133,5 +135,11 @@ body {
       }
     }
   }
+}
+
+#main-progress-bar {
+  height: 5px;
+  margin-bottom: 5px;
+  visibility: hidden;
 }
 </style>

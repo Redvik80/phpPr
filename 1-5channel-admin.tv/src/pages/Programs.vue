@@ -86,7 +86,9 @@
             <span class="label">Продолжительность: {{durationStr}}</span>
           </div>
 
-          <InputFile fileType="video" @fileChange="onFileChange($event)" />
+          <form ref="videoFile">
+            <InputFile fileType="video" @fileChange="onFileChange($event)" />
+          </form>
         </div>
       </div>
 
@@ -165,11 +167,7 @@ export default class Programs extends Vue {
       duration: 0,
       from_youtube: false,
       file_name: "",
-      youtube_id: "",
-      newFile: {
-        dataUrl: "",
-        extension: ""
-      }
+      youtube_id: ""
     };
   }
 
@@ -179,15 +177,12 @@ export default class Programs extends Vue {
       return;
     }
     this.selectedProgram.from_youtube = fromYoutube;
-    this.selectedProgram.file_name = "";
-    this.selectedProgram.youtube_id = "";
-    this.selectedProgram.newFile = {
-      dataUrl: "",
-      extension: ""
-    };
-    this.durationStr = "0сек.";
-    this.onChangeYtId();
-    (this.$refs.videoPlayer as HTMLVideoElement).src = "";
+    // this.selectedProgram.file_name = "";
+    // this.selectedProgram.youtube_id = "";
+    (this.$refs.videoFile as HTMLFormElement).reset();
+    // this.durationStr = "0сек.";
+    // this.onChangeYtId();
+    // (this.$refs.videoPlayer as HTMLVideoElement).src = "";
   }
 
   getPrograms() {
@@ -265,9 +260,8 @@ export default class Programs extends Vue {
   }
 
   onFileChange(value: NewFile) {
-    (this.$refs.videoPlayer as HTMLVideoElement).src = value.dataUrl;
+    (this.$refs.videoPlayer as HTMLVideoElement).src = value.tempUrl;
     (this.$refs.videoPlayer as HTMLVideoElement).load();
-    this.selectedProgram.newFile = value;
   }
 
   onLoadVideoFileMetadata(event) {
@@ -311,10 +305,11 @@ export default class Programs extends Vue {
   }
 
   onSaveBtnClick() {
+    let data = new FormData(this.$refs.videoFile as HTMLFormElement);
+    data.append("data", JSON.stringify(this.selectedProgram));
     if (this.selectedProgram.id) {
       this.$http
-        .put(httpS.api.program.change, this.selectedProgram)
-        .then(async (res: any) => {
+        .post(httpS.api.program.change, data).then(async (res: any) => {
           const newProgram = await res.body;
           this.programs = this.programs.map(item =>
             item.id === newProgram.id ? newProgram : item
@@ -323,8 +318,7 @@ export default class Programs extends Vue {
         });
     } else {
       this.$http
-        .post(httpS.api.program.add, this.selectedProgram)
-        .then(async () => {
+        .post(httpS.api.program.add, data).then(async () => {
           this.showChangeDialogFlag = false;
           this.getPrograms();
         });

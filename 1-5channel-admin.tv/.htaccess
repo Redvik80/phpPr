@@ -15,4 +15,4 @@ RewriteRule ^scheldule$ dist/index.html [L]
 RewriteRule ^pages$ dist/index.html [L]
 RewriteRule ^common_settings$ dist/index.html [L]
 
-# Options -Indexes
+Options -Indexes

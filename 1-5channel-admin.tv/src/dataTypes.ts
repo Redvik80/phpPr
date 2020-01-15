@@ -5,11 +5,11 @@ export interface Program {
     file_name: string;
     youtube_id: string;
     from_youtube: boolean;
-    newFile?: NewFile;
 }
 
 export interface NewFile {
-    dataUrl: string;
+    dataUrl?: string;
+    tempUrl?: string;
     extension: string;
 }
 

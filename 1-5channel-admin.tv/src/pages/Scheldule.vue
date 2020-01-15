@@ -94,9 +94,7 @@ export default class Scheldule extends Vue {
 
   created() {
     const dateNow = new Date();
-    this.selectedDate = moment().utc()
-      .startOf("date")
-      .toDate();
+    this.selectedDate = moment().utc().startOf("date").toDate();
     this.getScheldule();
     this.updateTempSchelduleItem();
   }
@@ -137,13 +135,9 @@ export default class Scheldule extends Vue {
 
   getScheldule() {
     this.$http
-      .get(httpS.api.scheldule.get, {
-        params: {
-          date:
-            moment(this.selectedDate).unix() + ""
-        }
-      })
-      .then(async (res: any) => {
+      .get(httpS.api.scheldule.get, {params: {
+        date: moment(this.selectedDate).unix() + ""
+      }}).then(async (res: any) => {
         this.schelduleItems = await res.json();
         this.updateTime();
         this.updateSchelduleBackup();
@@ -202,6 +196,7 @@ export default class Scheldule extends Vue {
   }
 
   onChangeDate(newDate: Date) {
+    newDate = moment(newDate).add(moment().utcOffset(), "minutes").toDate();
     if (+newDate === +this.selectedDate) return;
     this.tempSelectedDate = newDate;
     if (this.schelduleIsChanged()) {
@@ -230,6 +225,7 @@ export default class Scheldule extends Vue {
   }
 
   onSaveBtnClick() {
+    console.log(moment(this.selectedDate).unix());
     this.$http
       .put(
         httpS.api.scheldule.change,
@@ -242,8 +238,7 @@ export default class Scheldule extends Vue {
         }),
         {
           params: {
-            date:
-              moment(this.selectedDate).unix() + ""
+            date: moment(this.selectedDate).unix() + ""
           }
         }
       )

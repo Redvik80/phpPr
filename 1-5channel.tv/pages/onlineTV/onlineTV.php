@@ -1,7 +1,10 @@
 <html>
 
 <head>
-    <title>1.5 канал</title>
+    <?
+        include_once("../global.php");
+        include_once("../../components/commonSettings/commonSettings.php");
+    ?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" />
     <link rel="stylesheet" href="/dist/onlineTV.css">
@@ -12,7 +15,6 @@
 
 <body>
     <?
-        include_once("../global.php");
         include "../../components/header/header.php";
         $pageId = 3;
         $pageText = pg_fetch_all(pg_query($db, "SELECT title, description FROM page WHERE id = ${pageId}"))[0];

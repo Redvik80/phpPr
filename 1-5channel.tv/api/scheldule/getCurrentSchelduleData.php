@@ -10,6 +10,7 @@
         "WHERE \"date\"=$1 ORDER BY \"order\"",
         [$date]
     ));
+    if (!$pograms) $pograms = [];
 
     $time = [
         "timestamp" => $date,

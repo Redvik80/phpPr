@@ -19,6 +19,7 @@ import Editor from 'primevue/editor';
 import Panel from 'primevue/panel';
 import Checkbox from 'primevue/checkbox';
 import ProgressSpinner from 'primevue/progressspinner';
+import ProgressBar from 'primevue/progressbar';
 
 import ProgramsFindInput from './components/ProgramsFindInput.vue';
 import InputFile from './components/InputFile.vue';
@@ -50,6 +51,7 @@ Vue.component('Editor', Editor);
 Vue.component('Panel', Panel);
 Vue.component('Checkbox', Checkbox);
 Vue.component('ProgressSpinner', ProgressSpinner);
+Vue.component('ProgressBar', ProgressBar);
 
 Vue.component('ProgramsFindInput', ProgramsFindInput);
 Vue.component('InputFile', InputFile);
